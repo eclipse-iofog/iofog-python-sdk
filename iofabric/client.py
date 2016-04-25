@@ -4,6 +4,7 @@ import threading
 import iomessage
 import urllib2
 import json
+import os
 
 NEW_MESSAGE=13
 RECEIPT=14
