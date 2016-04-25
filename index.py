@@ -82,9 +82,11 @@ def build_message(msg_old, config):
     return msg
 
 
+host = client.get_host();
+
 listener = IoFabricListener()
-msgClient = client.Client("ws://iofabric:54321/v2/control/id/" + CONTAINER_ID, listener)
+msgClient = client.Client("ws://" + host + ":54321/v2/control/id/" + CONTAINER_ID, listener)
 msgClient.connect()
 
-ctlClient = client.Client("ws://iofabric:54321/v2/message/id/" + CONTAINER_ID, listener)
+ctlClient = client.Client("ws://" + host + ":54321/v2/message/id/" + CONTAINER_ID, listener)
 ctlClient.connect()
