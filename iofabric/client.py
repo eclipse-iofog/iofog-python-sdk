@@ -54,3 +54,10 @@ class Client(WebSocketClient):
 
 def worker(client):
     client.run_forever()
+    
+def get_host():
+    response = os.system("ping -c 1 " + "iofabric")
+    if response == 0:
+        return "iofabric"
+    else:
+        return "127.0.0.1"
