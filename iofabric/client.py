@@ -6,17 +6,18 @@ import urllib2
 import json
 import os
 
+
 NEW_MESSAGE=13
 RECEIPT=14
-ACK=15
-CONTROL=16
-
-IOFABRIC_CONFIG_URL="http://iofabric:54321/v2/config/get"
+ACK=11
+CONTROL=12
 
 class Client(WebSocketClient):
-    def __init__(self, url, listener):
+    def __init__(self, url, listener, container_id):
         super(Client, self).__init__(url)
         self.listener=listener
+        self.url=url
+        self.container_id=container_id
 
     def opened(self):
         self.listener.onConnected()
@@ -39,7 +40,9 @@ class Client(WebSocketClient):
         if opt_code == ACK:
             print "ACK recieved."
         if opt_code == CONTROL:
-            self.listener.onUpdateConfig(json.load(urllib2.urlopen(IOFABRIC_CONFIG_URL)))
+            req = urllib2.Request("http://" + get_host() + ":10500/v2/config/get", "{\"id\":\"" + self.container_id + "\"}", {'Content-Type': 'application/json'})
+            response = urllib2.urlopen(req)
+            self.listener.onUpdateConfig(response.read())
 
     def send_message(self, msg):
         raw_data=bytearray()
@@ -55,7 +58,7 @@ class Client(WebSocketClient):
 
 def worker(client):
     client.run_forever()
-    
+
 def get_host():
     response = os.system("ping -c 1 " + "iofabric")
     if response == 0:
