@@ -17,10 +17,15 @@ Create ioMessage:
  msg.id ="MyId"
  msg.tag="MyTag"
  msg.groupid="MyGroupId"
+ ...
 ```
 
 #### WEBSOCKET
-import iofabric.client:
+Import iofabric.client:
+```
+ import iofabric.client
+```
+Set up a global variables for config and ws clients:
 ```
  config=None
  msgClient=None
