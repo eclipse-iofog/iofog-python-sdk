@@ -11,53 +11,71 @@ This module lets you easily build an ioElement. It gives you all the functionali
  - connect to ioFabric Message Channel via WebSocket (wsMessageConnection) and publish new message via this channel (wsSendMessage)
 
 ## Code snippets: 
-
-import module:
+Create ioMessage: 
 ```
-  from iofabric import *
-```
-
-set up custom host, port and container's ID (in case of no params default values for host and port will be used: 'iofabric', 54321)
-and pass main callback to trigger when ioFabricClient initialization is done:
+ msg=IoMessage
+ msg.id ="MyId"
+ msg.tag="MyTag"
+ msg.groupid="MyGroupId"
 ```
 
+#### WEBSOCKET
+import iofabric.client:
+```
+ config=None
+ msgClient=None
+ ctlClient=None
+```
+Implement a WS listener:
+```
 class IoFabricListener:
-
+ 
     def onConnected(self):
-        ```
-
+        return
+ 
     def onClosed(self):
-        ```
-
+        return
+ 
     def onMessage(self, msg):
-        ```
-
-    def onUpdateConfig(self, new_config):
-        ```
-host = client.get_host();
-listener = IoFabricListener()
-msgClient = client.Client("ws://" + host + ":54321/v2/control/id/" + CONTAINER_ID, listener)
-msgClient.connect()
-ctlClient = client.Client("ws://" + host + ":54321/v2/message/id/" + CONTAINER_ID, listener)
-ctlClient.connect()
-```
-
-#### WebSocket(WS) calls
-open WS Message Channel to ioFabric with callback to send new message via this channel
-```
-msg=msg=iomessage.IoMessage()
-```
-msgClient.send_message(msg)
-```
-
-Open WS Control Channel to ioFabric
-```
-config=None
-class IoFabricListener:
-```
-
+        print(msg)
+        #Do some stuff
+ 
     def onUpdateConfig(self, new_config):
         config=new_config
+```
+Initialize a WS clients:
+```
+ host = iofabric.client.get_host();
+ listener = IoFabricListener()
+ msgClient = iofabric.client.Client("ws://" + host + ":10500/v2/control/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
+ msgClient.connect()
+```
+```
+ ctlClient = iofabric.client.Client("ws://" + host + ":10500/v2/message/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
+ ctlClient.connect()
+```
+It will be start a clients in a separate threads in async mode.
 
-ctlClient = client.Client("ws://" + host + ":54321/v2/message/id/" + CONTAINER_ID, listener)
-ctlClient.connect()
+#### REST
+```
+ req = urllib2.Request("http://" + get_host() + ":54321/<URL>", "{\"id\":\"" + container_id + "\"}", {'Content-Type': 'application/json'})
+ response = urllib2.urlopen(req)
+ raw_msg=response.read()
+```
+Message converting
+JSON to IoMessage:
+```
+ msg=iofabric.iomessage.json2message(json_msg)
+```
+IoMessage to JSON:
+```
+ json_msg=iofabric.iomessage.message2json(msg)
+```
+Byte Array to IoMessage:
+```
+ msg=iofabric.iomessage.bytes2message(byte_array_msg)
+```
+IoMessage To Byte Array:
+```
+ byte_array_msg=iofabric.iomessage.message2bytes(msg)
+```
