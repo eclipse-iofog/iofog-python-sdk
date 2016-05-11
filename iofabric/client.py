@@ -42,7 +42,7 @@ class Client(WebSocketClient):
         if opt_code == CONTROL:
             req = urllib2.Request("http://" + get_host() + ":54321/v2/config/get", "{\"id\":\"" + self.container_id + "\"}", {'Content-Type': 'application/json'})
             response = urllib2.urlopen(req)
-            self.listener.onUpdateConfig(response.read())
+            self.listener.onUpdateConfig(json.loads(response.read()))
 
     def send_message(self, msg):
         raw_data=bytearray()
