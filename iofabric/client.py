@@ -40,7 +40,7 @@ class Client(WebSocketClient):
         if opt_code == ACK:
             print "ACK recieved."
         if opt_code == CONTROL:
-            req = urllib2.Request("http://" + get_host() + ":10500/v2/config/get", "{\"id\":\"" + self.container_id + "\"}", {'Content-Type': 'application/json'})
+            req = urllib2.Request("http://" + get_host() + ":54321/v2/config/get", "{\"id\":\"" + self.container_id + "\"}", {'Content-Type': 'application/json'})
             response = urllib2.urlopen(req)
             self.listener.onUpdateConfig(response.read())
 
