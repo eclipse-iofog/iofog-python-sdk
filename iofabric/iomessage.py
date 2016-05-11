@@ -46,10 +46,10 @@ def message2bytes(msg):
         bHeadArr.extend(int2one_bytes(0))
     #tag
     if msg.tag != None:
-        bHeadArr.extend(int2one_bytes(len(msg.tag)))
+        bHeadArr.extend(int2two_bytes(len(msg.tag)))
         bDatArr.extend(str2bytes(msg.tag))
     else:
-        bHeadArr.extend(int2one_bytes(0))
+        bHeadArr.extend(int2two_bytes(0))
     #group id
     if msg.groupid != None:
         bHeadArr.extend(int2one_bytes(len(msg.groupid)))
@@ -100,10 +100,10 @@ def message2bytes(msg):
         bHeadArr.extend(int2two_bytes(0))
     #chainposition
     if msg.chainposition != None:
-        bHeadArr.extend(int2two_bytes(8))
+        bHeadArr.extend(int2one_bytes(8))
         bDatArr.extend(long2bytes(msg.chainposition))
     else:
-        bHeadArr.extend(int2two_bytes(0))
+        bHeadArr.extend(int2one_bytes(0))
     #hash
     if msg.hash != None:
         bHeadArr.extend(int2two_bytes(len(msg.hash)))
@@ -153,10 +153,11 @@ def message2bytes(msg):
     else:
         bHeadArr.extend(int2four_bytes(0))
 
-
+    bMsgArrWithLen=bytearray(int2four_bytes(len(bHeadArr) + len(bDatArr) - 1))
     bMsgArr.extend(bHeadArr)
     bMsgArr.extend(bDatArr)
-    return bMsgArr
+    bMsgArrWithLen.extend(bMsgArr)
+    return bMsgArrWithLen
 
 def bytes2message(msgBytes):
     msg=IoMessage()
@@ -170,7 +171,7 @@ def bytes2message(msgBytes):
     if(data != None):
         msg.id = bytes2str(data)
     #tag
-    data, data_offset, head_offset = fetch_data(head_offset, 1, data_offset, msgBytes)
+    data, data_offset, head_offset = fetch_data(head_offset, 2, data_offset, msgBytes)#2
     if(data != None):
         msg.tag = bytes2str(data)
     #group id
@@ -206,7 +207,7 @@ def bytes2message(msgBytes):
     if(data != None):
         msg.authgroup = bytes2str(data)
     #chainposition
-    data, data_offset, head_offset = fetch_data(head_offset, 2, data_offset, msgBytes)
+    data, data_offset, head_offset = fetch_data(head_offset, 1, data_offset, msgBytes)#1
     if(data != None):
         msg.chainposition = bytes2lonf(data)
     #hash
