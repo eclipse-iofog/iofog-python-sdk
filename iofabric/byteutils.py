@@ -58,7 +58,7 @@ def bytes2lonf(val):
     return val[0]*256*256*256*256*256*256*256 + val[1]*256*256*256*256*256*256 + val[2]*256*256*256*256*256 + val[3]*256*256*256*256 + val[4]*256*256*256 + val[5]*256*256 + val[6]*256 + val[7]
 
 def str2bytes(val):
-    return bytearray(val)
+    return val.encode("UTF-8")
 
 def bytes2str(val):
     return val.decode("UTF-8")
