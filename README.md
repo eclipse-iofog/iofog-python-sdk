@@ -12,7 +12,7 @@ This module lets you easily build an ioElement. It gives you all the functionali
 
 ## Code snippets: 
 Create ioMessage: 
-```
+```python
  msg=IoMessage
  msg.id ="MyId"
  msg.tag="MyTag"
@@ -22,17 +22,17 @@ Create ioMessage:
 
 #### WEBSOCKET
 Import iofabric.client:
-```
+```python
  import iofabric.client
 ```
 Set up a global variables for config and ws clients:
-```
+```python
  config=None
  msgClient=None
  ctlClient=None
 ```
 Implement a WS listener:
-```
+```python
 class IoFabricListener:
  
     def onConnected(self):
@@ -49,38 +49,38 @@ class IoFabricListener:
         config=new_config
 ```
 Initialize a WS clients:
-```
+```python
  host = iofabric.client.get_host();
  listener = IoFabricListener()
  msgClient = iofabric.client.Client("ws://" + host + ":10500/v2/control/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
  msgClient.connect()
 ```
-```
+```python
  ctlClient = iofabric.client.Client("ws://" + host + ":10500/v2/message/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
  ctlClient.connect()
 ```
 It will be start a clients in a separate threads in async mode.
 
 #### REST
-```
+```python
  req = urllib2.Request("http://" + get_host() + ":54321/<URL>", "{\"id\":\"" + container_id + "\"}", {'Content-Type': 'application/json'})
  response = urllib2.urlopen(req)
  raw_msg=response.read()
 ```
 Message converting
 JSON to IoMessage:
-```
+```python
  msg=iofabric.iomessage.json2message(json_msg)
 ```
 IoMessage to JSON:
-```
+```python
  json_msg=iofabric.iomessage.message2json(msg)
 ```
 Byte Array to IoMessage:
-```
+```python
  msg=iofabric.iomessage.bytes2message(byte_array_msg)
 ```
 IoMessage To Byte Array:
-```
+```python
  byte_array_msg=iofabric.iomessage.message2bytes(msg)
 ```
