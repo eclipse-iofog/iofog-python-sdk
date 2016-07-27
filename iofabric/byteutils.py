@@ -64,13 +64,13 @@ def bytes2str(val):
     return val.decode("UTF-8")
 
 def fetch_data(head_offset, head_len,  data_offset, data):
-    data_len=None
+    data_len = None
     if head_len == 1:
-        data_len=one_bytes2int(data[head_offset:head_offset+head_len])
+        data_len = one_bytes2int(data[head_offset:head_offset+head_len])
     if head_len == 2:
-        data_len=two_bytes2int(data[head_offset:head_offset+head_len])
+        data_len = two_bytes2int(data[head_offset:head_offset+head_len])
     if head_len == 4:
-        data_len=four_bytes2int(data[head_offset:head_offset+head_len])
+        data_len = four_bytes2int(data[head_offset:head_offset+head_len])
     if data_len == 0:
         return None, data_offset + data_len, head_offset + head_len
     else:
