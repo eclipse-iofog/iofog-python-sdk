@@ -10,6 +10,7 @@ NEW_MESSAGE = 13
 RECEIPT = 14
 ACK = 11
 CONTROL = 12
+RECONNECT_TIMEOUT=1
 
 class Client(WebSocketClient):
     def __init__(self, url, listener, container_id):
@@ -19,9 +20,17 @@ class Client(WebSocketClient):
         self.container_id = container_id
 
     def opened(self):
+        self.cur_timeout=RECONNECT_TIMEOUT
+        self.connected=True
         self.listener.onConnected()
 
     def closed(self, code, reason=None):
+        self.connected=False
+        while not self.connected:
+            time.sleep(self.cur_timeout)
+            self.connect()
+            if self.cur_timeout < 10:
+                self.cur_timeout = 2*self.cur_timeout
         self.listener.onClosed()
 
 
