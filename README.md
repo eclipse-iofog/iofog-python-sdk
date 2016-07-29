@@ -13,17 +13,32 @@ This module lets you easily build an ioElement. It gives you all the functionali
 ## Code snippets: 
 Create ioMessage: 
 ```python
- msg=IoMessage
- msg.id ="MyId"
- msg.tag="MyTag"
- msg.groupid="MyGroupId"
+msg=iofabric.iomessage.IoMessage()
+msg.infotype="infotype"
+msg.infoformat="infoformat"
+msg.contentdata="sdkjhwrtiy8wrtgSDFOiuhsrgowh4touwsdhsDFDSKJhsdkljasjklweklfjwhefiauhw98p328946982weiusfhsdkufhaskldjfslkjdhfalsjdf=serg4towhr"
+msg.contextdata=""
+msg.tag="tag"
+msg.groupid="groupid"
+msg.sequencenumber=0
+msg.sequencetotal=0
+msg.priority=0
+msg.publisher="CONTAINER'S_ID"
+msg.authid="authid"
+msg.authgroup="authgroup"
+msg.chainposition=0
+msg.hash="hash"
+msg.previoushash="previoushash"
+msg.nonce="nonce"
+msg.difficultytarget=0
  ...
 ```
 
 #### WEBSOCKET
-Import iofabric.client:
+Import ioFabric client and message util :
 ```python
  import iofabric.client
+ import iofabric.iomessage
 ```
 Set up a global variables for config and ws clients:
 ```python
@@ -52,14 +67,14 @@ Initialize a WS clients:
 ```python
  host = iofabric.client.get_host();
  listener = IoFabricListener()
+ 
  msgClient = iofabric.client.Client("ws://" + host + ":10500/v2/control/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
  msgClient.connect()
-```
-```python
+ 
  ctlClient = iofabric.client.Client("ws://" + host + ":10500/v2/message/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
  ctlClient.connect()
 ```
-It will be start a clients in a separate threads in async mode.
+It will start clients in a separate threads in async mode.
 
 #### REST
 ```python
@@ -67,7 +82,7 @@ It will be start a clients in a separate threads in async mode.
  response = urllib2.urlopen(req)
  raw_msg=response.read()
 ```
-Message converting
+#### Message utils
 JSON to IoMessage:
 ```python
  msg=iofabric.iomessage.json2message(json_msg)
@@ -83,4 +98,18 @@ Byte Array to IoMessage:
 IoMessage To Byte Array:
 ```python
  byte_array_msg=iofabric.iomessage.message2bytes(msg)
+```
+#### Examples
+Send message via REST:
+```python
+new_msg=iofabric.iomessage.IoMessage()
+#set any fields you need to
+req = urllib2.Request("http://" + iofabric.client.get_host() + ":54321/v2/messages/new", iofabric.iomessage.message2json(new_msg), {'Content-Type': 'application/json'})
+```
+Send message via Socket:
+```python
+#initialize msgClient
+new_msg=iofabric.iomessage.IoMessage()
+#set any fields you need to
+msgClient.send_message(new_msg)
 ```
