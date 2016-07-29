@@ -39,10 +39,9 @@ class Client(WebSocketClient):
         if opt_code == NEW_MESSAGE:
             #print "SDK received NEW_MESSAGE signal\n"
             msg_data = bytearray(m.data[5:])
-            #msg_data=m.data
             if len(msg_data) == 0:
                 return
-            msg=iomessage.bytes2message(msg_data)
+            msg = iomessage.bytes2message(msg_data)
             self.send(bytearray([ACK]), binary=True)
             self.listener.onMessage(msg)
         if opt_code == ACK:
