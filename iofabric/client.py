@@ -4,13 +4,15 @@ import iomessage
 import urllib2
 import json
 import os
+import time
 
 
 NEW_MESSAGE = 13
 RECEIPT = 14
 ACK = 11
 CONTROL = 12
-RECONNECT_TIMEOUT=1
+RECONNECT_TIMEOUT = 1
+
 
 class Client(WebSocketClient):
     def __init__(self, url, listener, container_id):
@@ -18,21 +20,22 @@ class Client(WebSocketClient):
         self.listener = listener
         self.url = url
         self.container_id = container_id
+        self.cur_timeout = RECONNECT_TIMEOUT
+        self.connected = None
 
     def opened(self):
-        self.cur_timeout=RECONNECT_TIMEOUT
-        self.connected=True
+        self.cur_timeout = RECONNECT_TIMEOUT
+        self.connected = True
         self.listener.onConnected()
 
     def closed(self, code, reason=None):
-        self.connected=False
+        self.connected = False
         while not self.connected:
             time.sleep(self.cur_timeout)
             self.connect()
             if self.cur_timeout < 10:
                 self.cur_timeout = 2*self.cur_timeout
         self.listener.onClosed()
-
 
     def received_message(self, m):
         opt_code = bytearray(m.data)[0]
@@ -60,7 +63,6 @@ class Client(WebSocketClient):
             else:
                 self.listener.onUpdateConfig(json.loads(full_config_json["config"]))
 
-
     def send_message(self, msg):
         raw_data = bytearray()
         raw_data += bytearray([NEW_MESSAGE])
@@ -78,6 +80,7 @@ class Client(WebSocketClient):
 
 def worker(client):
     client.run_forever()
+
 
 def get_host():
     response = os.system("ping -c 1 " + "iofabric")
