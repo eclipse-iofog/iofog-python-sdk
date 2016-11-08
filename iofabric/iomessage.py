@@ -153,7 +153,7 @@ def message2bytes(msg):
     else:
         bHeadArr.extend(int2four_bytes(0))
 
-    bMsgArrWithLen = bytearray(int2four_bytes(len(bHeadArr) + len(bDatArr) - 1))
+    bMsgArrWithLen = bytearray(int2four_bytes(len(bHeadArr) + len(bDatArr)))
     bMsgArr.extend(bHeadArr)
     bMsgArr.extend(bDatArr)
     bMsgArrWithLen.extend(bMsgArr)

@@ -32,9 +32,12 @@ class Client(WebSocketClient):
         self.connected = False
         while not self.connected:
             time.sleep(self.cur_timeout)
-            self.connect()
-            if self.cur_timeout < 10:
-                self.cur_timeout = 2*self.cur_timeout
+            try:
+                if self.cur_timeout < 10:
+                    self.cur_timeout = 2*self.cur_timeout
+                self.connect()
+            except Exception, e:
+                print 'Reconnect exception: ' + str(e)
         self.listener.onClosed()
 
     def received_message(self, m):
@@ -70,9 +73,12 @@ class Client(WebSocketClient):
         self.send(raw_data, binary=True)
 
     def connect(self):
-        super(Client, self).connect()
-        self.worker = threading.Thread(target=worker, args=(self,))
-        self.worker.start()
+        try:
+            super(Client, self).connect()
+            self.worker = threading.Thread(target=worker, args=(self,))
+            self.worker.start()
+        except e:
+            print 'Error connecting to WebSocket: ' + str(e)
 
     def unhandled_error(self, error):
         print "unhandled_error"
