@@ -1,19 +1,19 @@
 # container-sdk-python
 
-This module lets you easily build an ioElement. It gives you all the functionality to interact with ioFabric via Local API. Additionally some useful methods to work with ioMessage.
+This module lets you easily build an ioElement. It gives you all the functionality to interact with ioFog via Local API. Additionally some useful methods to work with ioMessage.
 
- - send new message to ioFabric (sendNewMessage)
- - fetch next unread messages from ioFabric (getNextMessages)
+ - send new message to ioFog (sendNewMessage)
+ - fetch next unread messages from ioFog (getNextMessages)
  - fetch messages for time period and list of accessible publishers (getMessagesByQuery)
  - get config options (getConfig)
  - create ioMessage JSON object (ioMessage)
- - connect to ioFabric Control Channel via WebSocket (wsControlConnection)
- - connect to ioFabric Message Channel via WebSocket (wsMessageConnection) and publish new message via this channel (wsSendMessage)
+ - connect to ioFog Control Channel via WebSocket (wsControlConnection)
+ - connect to ioFog Message Channel via WebSocket (wsMessageConnection) and publish new message via this channel (wsSendMessage)
 
 ## Code snippets: 
 Create ioMessage: 
 ```python
-msg=iofabric.iomessage.IoMessage()
+msg=iofog.iomessage.IoMessage()
 msg.infotype="infotype"
 msg.infoformat="infoformat"
 msg.contentdata="sdkjhwrtiy8wrtgSDFOiuhsrgowh4touwsdhsDFDSKJhsdkljasjklweklfjwhefiauhw98p328946982weiusfhsdkufhaskldjfslkjdhfalsjdf=serg4towhr"
@@ -35,10 +35,10 @@ msg.difficultytarget=0
 ```
 
 #### WEBSOCKET
-Import ioFabric client and message util :
+Import ioFog client and message util :
 ```python
- import iofabric.client
- import iofabric.iomessage
+ import iofog.client
+ import iofog.iomessage
 ```
 Set up a global variables for config and ws clients:
 ```python
@@ -48,7 +48,7 @@ Set up a global variables for config and ws clients:
 ```
 Implement a WS listener:
 ```python
-class IoFabricListener:
+class ioFogListener:
  
     def onConnected(self):
         return
@@ -65,13 +65,13 @@ class IoFabricListener:
 ```
 Initialize a WS clients:
 ```python
- host = iofabric.client.get_host();
- listener = IoFabricListener()
+ host = iofog.client.get_host();
+ listener = ioFogListener()
  
- msgClient = iofabric.client.Client("ws://" + host + ":10500/v2/control/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
+ msgClient = iofog.client.Client("ws://" + host + ":10500/v2/control/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
  msgClient.connect()
  
- ctlClient = iofabric.client.Client("ws://" + host + ":10500/v2/message/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
+ ctlClient = iofog.client.Client("ws://" + host + ":10500/v2/message/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
  ctlClient.connect()
 ```
 It will start clients in a separate threads in async mode.
@@ -85,31 +85,31 @@ It will start clients in a separate threads in async mode.
 #### Message utils
 JSON to IoMessage:
 ```python
- msg=iofabric.iomessage.json2message(json_msg)
+ msg=iofog.iomessage.json2message(json_msg)
 ```
 IoMessage to JSON:
 ```python
- json_msg=iofabric.iomessage.message2json(msg)
+ json_msg=iofog.iomessage.message2json(msg)
 ```
 Byte Array to IoMessage:
 ```python
- msg=iofabric.iomessage.bytes2message(byte_array_msg)
+ msg=iofog.iomessage.bytes2message(byte_array_msg)
 ```
 IoMessage To Byte Array:
 ```python
- byte_array_msg=iofabric.iomessage.message2bytes(msg)
+ byte_array_msg=iofog.iomessage.message2bytes(msg)
 ```
 #### Examples
 Send message via REST:
 ```python
-new_msg=iofabric.iomessage.IoMessage()
+new_msg=iofog.iomessage.IoMessage()
 #set any fields you need to
-req = urllib2.Request("http://" + iofabric.client.get_host() + ":54321/v2/messages/new", iofabric.iomessage.message2json(new_msg), {'Content-Type': 'application/json'})
+req = urllib2.Request("http://" + iofog.client.get_host() + ":54321/v2/messages/new", iofog.iomessage.message2json(new_msg), {'Content-Type': 'application/json'})
 ```
 Send message via Socket:
 ```python
 #initialize msgClient
-new_msg=iofabric.iomessage.IoMessage()
+new_msg=iofog.iomessage.IoMessage()
 #set any fields you need to
 msgClient.send_message(new_msg)
 ```

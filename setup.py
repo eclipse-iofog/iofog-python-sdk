@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-        name='iofabric',
-        packages=["iofabric"],
-        version='1.0.8',
+        name='iofog',
+        packages=["iofog"],
+        version='1.0.9',
         description='Native python SDK for ioTracks development.',
         url='http://iotracks.com/',
         author='IOTRACKS',

@@ -89,8 +89,8 @@ def worker(client):
 
 
 def get_host():
-    response = os.system("ping -c 1 " + "iofabric")
+    response = os.system("ping -c 1 " + "iofog")
     if response == 0:
-        return "iofabric"
+        return "iofog"
     else:
         return "127.0.0.1"
