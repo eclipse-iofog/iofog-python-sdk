@@ -36,7 +36,7 @@ class Client(WebSocketClient):
                 if self.cur_timeout < 10:
                     self.cur_timeout = 2*self.cur_timeout
                 self.connect()
-            except Exception, e:
+            except Exception as e:
                 print 'Reconnect exception: ' + str(e)
         self.listener.onClosed()
 
@@ -77,7 +77,7 @@ class Client(WebSocketClient):
             super(Client, self).connect()
             self.worker = threading.Thread(target=worker, args=(self,))
             self.worker.start()
-        except e:
+        except Exception as e:
             print 'Error connecting to WebSocket: ' + str(e)
 
     def unhandled_error(self, error):
