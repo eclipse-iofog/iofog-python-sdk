@@ -78,10 +78,10 @@ class Client(WebSocketClient):
             self.worker = threading.Thread(target=worker, args=(self,))
             self.worker.start()
         except Exception as e:
-            print 'Error connecting to WebSocket: ' + str(e)
+            self.listener.onError(e)
 
     def unhandled_error(self, error):
-        print "unhandled_error"
+        self.listener.onError(error)
 
 
 def worker(client):
