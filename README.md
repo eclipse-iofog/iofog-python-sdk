@@ -39,6 +39,7 @@ Import ioFog client and message util :
 ```python
  import iofog.client
  import iofog.iomessage
+ import iofog.byteutils
 ```
 Set up a global variables for config and ws clients:
 ```python
