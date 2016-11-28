@@ -69,10 +69,10 @@ Initialize a WS clients:
  host = iofog.client.get_host();
  listener = ioFogListener()
  
- msgClient = iofog.client.Client("ws://" + host + ":10500/v2/control/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
+ msgClient = iofog.client.Client("ws://" + host + ":54321/v2/control/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
  msgClient.connect()
  
- ctlClient = iofog.client.Client("ws://" + host + ":10500/v2/message/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
+ ctlClient = iofog.client.Client("ws://" + host + ":54321/v2/message/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
  ctlClient.connect()
 ```
 It will start clients in a separate threads in async mode.
