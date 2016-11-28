@@ -1,9 +1,10 @@
 from ws4py.client.threadedclient import WebSocketClient
 import threading
 import iomessage
+import byteutils
 import urllib2
 import json
-import os
+import subprocess
 import time
 
 
@@ -22,11 +23,13 @@ class Client(WebSocketClient):
         self.container_id = container_id
         self.cur_timeout = RECONNECT_TIMEOUT
         self.connected = None
+        return
 
     def opened(self):
         self.cur_timeout = RECONNECT_TIMEOUT
         self.connected = True
         self.listener.onConnected()
+        return
 
     def closed(self, code, reason=None):
         self.connected = False
@@ -39,6 +42,7 @@ class Client(WebSocketClient):
             except Exception as e:
                 print 'Reconnect exception: ' + str(e)
         self.listener.onClosed()
+        return
 
     def received_message(self, m):
         opt_code = bytearray(m.data)[0]
@@ -50,11 +54,24 @@ class Client(WebSocketClient):
             msg = iomessage.bytes2message(msg_data)
             self.send(bytearray([ACK]), binary=True)
             self.listener.onMessage(msg)
+            return
         if opt_code == ACK:
-            print "SDK received ACK signal\n"
+            #print "SDK received ACK signal\n"
+            return
         if opt_code == RECEIPT:
-            print "SDK received RECEIPT signal\n"
+            #print "SDK received RECEIPT signal\n"
+            receipt_data = bytearray(m.data)
+            if len(receipt_data) == 0:
+                return
+            size = receipt_data[1]
+            pos = 3
+            message_id = str(receipt_data[pos: pos + size])
+            pos += size
+            size = receipt_data[2]
+            timestamp = byteutils.bytes2lonf(receipt_data[pos: pos + size])
+            self.listener.onMessageReceipt(message_id, timestamp)
             self.send(bytearray([ACK]), binary=True)
+            return
         if opt_code == CONTROL:
             #print "SDK received CONTROL signal\n"
             req = urllib2.Request("http://" + get_host() + ":54321/v2/config/get", "{\"id\":\"" + self.container_id + "\"}", {'Content-Type': 'application/json'})
@@ -65,23 +82,29 @@ class Client(WebSocketClient):
                 self.listener.onUpdateConfig(None)
             else:
                 self.listener.onUpdateConfig(json.loads(full_config_json["config"]))
+            return
 
     def send_message(self, msg):
+        msg.publisher = self.container_id
         raw_data = bytearray()
         raw_data += bytearray([NEW_MESSAGE])
         raw_data += iomessage.message2bytes(msg)
         self.send(raw_data, binary=True)
+        return
 
     def connect(self):
         try:
             super(Client, self).connect()
             self.worker = threading.Thread(target=worker, args=(self,))
             self.worker.start()
+            return
         except Exception as e:
             self.listener.onError(e)
+            return
 
     def unhandled_error(self, error):
         self.listener.onError(error)
+        return
 
 
 def worker(client):
@@ -89,8 +112,17 @@ def worker(client):
 
 
 def get_host():
-    response = os.system("ping -c 1 " + "iofog")
-    if response == 0:
-        return "iofog"
-    else:
+    try:
+        response = subprocess.check_call(
+            ["ping", "-c", "3", "iofog"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        if response == 0:
+            return "iofog"
+        else:
+            print "Host 'iofog' is unreachable. Changing to default IP '127.0.0.1'"
+            return "127.0.0.1"
+    except subprocess.CalledProcessError as e:
+        print "Error with ping process: " + str(e) +"\nChanging to default IP '127.0.0.1'"
         return "127.0.0.1"
