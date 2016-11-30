@@ -6,6 +6,7 @@ import urllib2
 import json
 import subprocess
 import time
+import exceptions
 
 
 NEW_MESSAGE = 13
@@ -39,7 +40,7 @@ class Client(WebSocketClient):
                 if self.cur_timeout < 10:
                     self.cur_timeout = 2*self.cur_timeout
                 self.connect()
-            except Exception as e:
+            except exceptions.BaseException as e:
                 print 'Reconnect exception: ' + str(e)
         self.listener.onClosed()
         return
@@ -98,7 +99,7 @@ class Client(WebSocketClient):
             self.worker = threading.Thread(target=worker, args=(self,))
             self.worker.start()
             return
-        except Exception as e:
+        except exceptions.BaseException as e:
             self.listener.onError(e)
             return
 
@@ -124,5 +125,5 @@ def get_host():
             print "Host 'iofog' is unreachable. Changing to default IP '127.0.0.1'"
             return "127.0.0.1"
     except subprocess.CalledProcessError as e:
-        print "Error with ping process: " + str(e) +"\nChanging to default IP '127.0.0.1'"
+        print "Error with ping process: " + str(e) + "\nChanging to default IP '127.0.0.1'"
         return "127.0.0.1"
