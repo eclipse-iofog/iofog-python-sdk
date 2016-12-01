@@ -7,26 +7,26 @@ IO_MESSAGE_VERSION = 4
 
 class IoMessage:
     def __init__(self):
-        self.id = None
-        self.tag = None
-        self.groupid = None
+        self.id = ""
+        self.tag = ""
+        self.groupid = ""
         self.version = IO_MESSAGE_VERSION
         self.sequencenumber = 0
         self.sequencetotal = 0
         self.priority = 0
         self.timestamp = 0
-        self.publisher = None
-        self.authid = None
-        self.authgroup = None
+        self.publisher = ""
+        self.authid = ""
+        self.authgroup = ""
         self.chainposition = 0
-        self.hash = None
-        self.previoushash = None
-        self.nonce = None
+        self.hash = ""
+        self.previoushash = ""
+        self.nonce = ""
         self.difficultytarget = 0
-        self.infotype = None
-        self.infoformat = None
-        self.contextdata = None
-        self.contentdata = None
+        self.infotype = ""
+        self.infoformat = ""
+        self.contextdata = ""
+        self.contentdata = ""
 
         #1 byte: id, tag, groupId, seqnum, seqtotal, priority, timestamp, publisher, chainpos, diftarget,infoformat, infortype
         #4 byte: context data, content data
@@ -245,92 +245,69 @@ def bytes2message(msg_bytes):
 
 
 def json2message(json_str):
-    msg = IoMessage
+    msg = IoMessage()
     json_msg = json.loads(json_str)
-    msg.id = fetch_value(json_msg, "id")
-    msg.tag = fetch_value(json_msg, "tag")
-    msg.groupid = fetch_value(json_msg, "groupid")
-    fetched_value = fetch_value(json_msg, "version")
-    if fetched_value is not None:
-        msg.version = fetched_value
-    fetched_value = fetch_value(json_msg, "timestamp")
-    if fetched_value is not None:
-        msg.timestamp = fetched_value
-    fetched_value = fetch_value(json_msg, "sequencenumber")
-    if fetched_value is not None:
-        msg.sequencenumber = fetched_value
-    fetched_value = fetch_value(json_msg, "sequencetotal")
-    if fetched_value is not None:
-        msg.sequencetotal = fetched_value
-    fetched_value = fetch_value(json_msg, "priority")
-    if fetched_value is not None:
-        msg.priority = fetched_value
-    msg.publisher = fetch_value(json_msg, "publisher")
-    msg.authid = fetch_value(json_msg, "authid")
-    msg.authgroup = fetch_value(json_msg, "authgroup")
-    fetched_value = fetch_value(json_msg, "chainposition")
-    if fetched_value is not None:
-        msg.chainposition = fetched_value
-    msg.hash = fetch_value(json_msg, "hash")
-    msg.previoushash = fetch_value(json_msg, "previoushash")
-    msg.nonce = fetch_value(json_msg, "nonce")
-    fetched_value = fetch_value(json_msg, "difficultytarget")
-    if fetched_value is not None:
-        msg.difficultytarget = fetched_value
-    msg.infotype = fetch_value(json_msg, "infotype")
-    msg.infoformat = fetch_value(json_msg, "infoformat")
+    msg.id = fetch_string(json_msg, "id")
+    msg.tag = fetch_string(json_msg, "tag")
+    msg.groupid = fetch_string(json_msg, "groupid")
+    msg.version = fetch_number(json_msg, "version")
+    msg.timestamp = fetch_number(json_msg, "timestamp")
+    msg.sequencenumber = fetch_number(json_msg, "sequencenumber")
+    msg.sequencetotal = fetch_number(json_msg, "sequencetotal")
+    msg.priority = fetch_number(json_msg, "priority")
+    msg.publisher = fetch_string(json_msg, "publisher")
+    msg.authid = fetch_string(json_msg, "authid")
+    msg.authgroup = fetch_string(json_msg, "authgroup")
+    msg.chainposition = fetch_number(json_msg, "chainposition")
+    msg.hash = fetch_string(json_msg, "hash")
+    msg.previoushash = fetch_string(json_msg, "previoushash")
+    msg.nonce = fetch_string(json_msg, "nonce")
+    msg.difficultytarget = fetch_number(json_msg, "difficultytarget")
+    msg.infotype = fetch_string(json_msg, "infotype")
+    msg.infoformat = fetch_string(json_msg, "infoformat")
     contextdata = fetch_value(json_msg, "contextdata")
     if contextdata is not None:
         msg.contextdata = base64.b64decode(contextdata)
+    else:
+        msg.contextdata = ""
     contentdata = fetch_value(json_msg, "contentdata")
     if contentdata is not None:
         msg.contentdata = base64.b64decode(contentdata)
+    else:
+        msg.contentdata = ""
     return msg
 
 
 def message2json(msg):
     if msg.version is None:
         msg.version = IO_MESSAGE_VERSION
-    if msg.sequencenumber is None:
-        msg.sequencenumber = 0
-    if msg.sequencetotal is None:
-        msg.sequencetotal = 0
-    if msg.priority is None:
-        msg.priority = 0
-    if msg.timestamp is None:
-        msg.timestamp = 0
-    if msg.chainposition is None:
-        msg.chainposition = 0
-    if msg.difficultytarget is None:
-        msg.difficultytarget = 0
     msg_dict = {}
-    msg_dict["id"] = msg.id
-    msg_dict["tag"] = msg.tag
-    msg_dict["groupid"] = msg.groupid
     msg_dict["version"] = msg.version
-    msg_dict["timestamp"] = msg.timestamp
-    msg_dict["sequencenumber"] = msg.sequencenumber
-    msg_dict["sequencetotal"] = msg.sequencetotal
-    msg_dict["priority"] = msg.priority
-    msg_dict["timestamp"] = msg.timestamp
-    msg_dict["publisher"] = msg.publisher
-    msg_dict["authid"] = msg.authid
-    msg_dict["authgroup"] = msg.authgroup
-    msg_dict["chainposition"] = msg.chainposition
-    msg_dict["hash"] = msg.hash
-    msg_dict["previoushash"] = msg.previoushash
-    msg_dict["nonce"] = msg.nonce
-    msg_dict["difficultytarget"] = msg.difficultytarget
-    msg_dict["infotype"] = msg.infotype
-    msg_dict["infoformat"] = msg.infoformat
+    msg_dict["id"] = get_string_value(msg.id)
+    msg_dict["tag"] = get_string_value(msg.tag)
+    msg_dict["groupid"] = get_string_value(msg.groupid)
+    msg_dict["timestamp"] = get_int_value(msg.timestamp)
+    msg_dict["sequencenumber"] = get_int_value(msg.sequencenumber)
+    msg_dict["sequencetotal"] = get_int_value(msg.sequencetotal)
+    msg_dict["priority"] = get_int_value(msg.priority)
+    msg_dict["publisher"] = get_string_value(msg.publisher)
+    msg_dict["authid"] = get_string_value(msg.authid)
+    msg_dict["authgroup"] = get_string_value(msg.authgroup)
+    msg_dict["chainposition"] = get_int_value(msg.chainposition)
+    msg_dict["hash"] = get_string_value(msg.hash)
+    msg_dict["previoushash"] = get_string_value(msg.previoushash)
+    msg_dict["nonce"] = get_string_value(msg.nonce)
+    msg_dict["difficultytarget"] = get_int_value(msg.difficultytarget)
+    msg_dict["infotype"] = get_string_value(msg.infotype)
+    msg_dict["infoformat"] = get_string_value(msg.infoformat)
     if msg.contextdata is not None:
         msg_dict["contextdata"] = base64.b64encode(msg.contextdata)
     else:
-        msg_dict["contextdata"] = msg.contextdata
+        msg_dict["contextdata"] = ""
     if msg.contentdata is not None:
         msg_dict["contentdata"] = base64.b64encode(msg.contentdata)
     else:
-        msg_dict["contentdata"] = msg.contentdata
+        msg_dict["contentdata"] = ""
     return json.dumps(msg_dict)
 
 
@@ -339,3 +316,31 @@ def fetch_value(json_msg, field_name):
     if field_name in json_msg:
         val = json_msg[field_name]
     return val
+
+
+def fetch_number(json_msg, field_name):
+    val = fetch_value(json_msg, field_name)
+    if val is None:
+        return 0
+    return val
+
+
+def fetch_string(json_msg, field_name):
+    val = fetch_value(json_msg, field_name)
+    if val is None:
+        return ""
+    return val
+
+
+def get_int_value(val):
+    if val is None:
+        return 0
+    else:
+        return val
+
+
+def get_string_value(val):
+    if val is None:
+        return ""
+    else:
+        return val
