@@ -105,7 +105,9 @@ Send message via REST:
 ```python
 new_msg=iofog.iomessage.IoMessage()
 #set any fields you need to
-req = urllib2.Request("http://" + iofog.client.get_host() + ":54321/v2/messages/new", iofog.iomessage.message2json(new_msg), {'Content-Type': 'application/json'})
+req = urllib2.Request("http://" + iofog.client.get_host() + ":54321/v2/messages/new", data=iofog.iomessage.message2json(new_msg), headers={"content-Type": "application/json"})
+response = urllib2.urlopen(req)
+responseJson = json.loads(response.read())
 ```
 Send message via Socket:
 ```python
