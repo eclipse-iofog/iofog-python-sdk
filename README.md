@@ -86,11 +86,11 @@ It will start clients in a separate threads in async mode.
 #### Message utils
 JSON to IoMessage:
 ```python
- msg=iofog.iomessage.json2message(json_msg)
+ msg=iofog.iomessage.json2message(json_msg, decode) // decode - flag which indicates if context and content data need to be decoded from base64 format
 ```
 IoMessage to JSON:
 ```python
- json_msg=iofog.iomessage.message2json(msg)
+ json_msg=iofog.iomessage.message2json(msg, encode) // decode - flag which indicates if context and content data need to be encoded to base64 format
 ```
 Byte Array to IoMessage:
 ```python
@@ -105,7 +105,7 @@ Send message via REST:
 ```python
 new_msg=iofog.iomessage.IoMessage()
 #set any fields you need to
-req = urllib2.Request("http://" + iofog.client.get_host() + ":54321/v2/messages/new", data=iofog.iomessage.message2json(new_msg), headers={"content-Type": "application/json"})
+req = urllib2.Request("http://" + iofog.client.get_host() + ":54321/v2/messages/new", data=iofog.iomessage.message2json(new_msg, True), headers={"content-Type": "application/json"})
 response = urllib2.urlopen(req)
 responseJson = json.loads(response.read())
 ```

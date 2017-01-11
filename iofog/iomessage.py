@@ -244,7 +244,7 @@ def bytes2message(msg_bytes):
     return msg
 
 
-def json2message(json_str):
+def json2message(json_str, decode):
     msg = IoMessage()
     json_msg = json.loads(json_str)
     msg.id = fetch_string(json_msg, "id")
@@ -267,18 +267,24 @@ def json2message(json_str):
     msg.infoformat = fetch_string(json_msg, "infoformat")
     contextdata = fetch_value(json_msg, "contextdata")
     if contextdata is not None:
-        msg.contextdata = base64.b64decode(contextdata)
+        if decode is True:
+            msg.contextdata = base64.b64decode(contextdata)
+        else:
+            msg.contextdata = contextdata
     else:
         msg.contextdata = ""
     contentdata = fetch_value(json_msg, "contentdata")
     if contentdata is not None:
-        msg.contentdata = base64.b64decode(contentdata)
+        if decode is True:
+            msg.contentdata = base64.b64decode(contentdata)
+        else:
+            msg.contentdata = contentdata
     else:
         msg.contentdata = ""
     return msg
 
 
-def message2json(msg):
+def message2json(msg, encode):
     if msg.version is None:
         msg.version = IO_MESSAGE_VERSION
     msg_dict = {}
@@ -301,11 +307,17 @@ def message2json(msg):
     msg_dict["infotype"] = get_string_value(msg.infotype)
     msg_dict["infoformat"] = get_string_value(msg.infoformat)
     if msg.contextdata is not None:
-        msg_dict["contextdata"] = base64.b64encode(msg.contextdata)
+        if encode is True:
+            msg_dict["contextdata"] = base64.b64encode(msg.contextdata)
+        else:
+            msg_dict["contextdata"] = msg.contextdata
     else:
         msg_dict["contextdata"] = ""
     if msg.contentdata is not None:
-        msg_dict["contentdata"] = base64.b64encode(msg.contentdata)
+        if encode is True:
+            msg_dict["contentdata"] = base64.b64encode(msg.contentdata)
+        else:
+            msg_dict["contentdata"] = msg.contentdata
     else:
         msg_dict["contentdata"] = ""
     return json.dumps(msg_dict)
