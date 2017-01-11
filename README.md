@@ -63,6 +63,12 @@ class ioFogListener:
  
     def onUpdateConfig(self, new_config):
         config=new_config
+        
+    def onMessageReceipt(message_id, timestamp):
+        # in case it needs to be checked if message was sent successfully to ioFog via data socket
+        
+    def onError(error):
+        # triggered in case of any error with socket connection
 ```
 Initialize a WS clients:
 ```python
