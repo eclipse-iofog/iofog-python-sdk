@@ -59,6 +59,8 @@ class IoFogClient:
     def establish_message_ws_connection(self, listener):
         if listener is not None and not isinstance(listener, IoFogMessageWsListener):
             raise IoFogException('Invalid listener instance')
+        if self.message_ws_client:
+            raise IoFogException('Connection has been already established')
         self.message_ws_client = IoFogMessageWsClient(self.id, self.ssl, self.host,
                                                       self.port, URL_GET_MESSAGE_WS, listener)
         self.message_ws_client.connect()
@@ -66,6 +68,8 @@ class IoFogClient:
     def establish_control_ws_connection(self, listener):
         if listener is not None and not isinstance(listener, IoFogControlWsListener):
             raise IoFogException('Invalid listener instance')
+        if self.control_ws_client:
+            raise IoFogException('Connection has been already established')
         self.control_ws_client = IoFogControlWsClient(self.id, self.ssl, self.host,
                                                       self.port, URL_GET_CONTROL_WS, listener)
         self.control_ws_client.connect()

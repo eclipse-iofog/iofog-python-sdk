@@ -2,8 +2,8 @@ from distutils.core import setup
 
 setup(
     name='iofog-container-sdk',
-    version='2.0',
-    packages=['client'],
+    version='1.0.4',
+    packages=['iofog_container_sdk'],
     url='http://iotracks.com/',
     license='',
     author='iotracks',

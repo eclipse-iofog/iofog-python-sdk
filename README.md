@@ -1,124 +1,148 @@
 # container-sdk-python
 
-This module lets you easily build an ioElement. It gives you all the functionality to interact with ioFog via Local API. Additionally some useful methods to work with ioMessage.
+This module lets you easily build an ioElement. It gives you all the functionality to interact with ioFog via Local API. It contains all necessary methods for IoMessage transformation as well.
 
- - send new message to ioFog (sendNewMessage)
- - fetch next unread messages from ioFog (getNextMessages)
- - fetch messages for time period and list of accessible publishers (getMessagesByQuery)
- - get config options (getConfig)
- - create ioMessage JSON object (ioMessage)
- - connect to ioFog Control Channel via WebSocket (wsControlConnection)
- - connect to ioFog Message Channel via WebSocket (wsMessageConnection) and publish new message via this channel (wsSendMessage)
+ - send new message to ioFog (post_message)
+ - fetch next unread messages from ioFog (get_next_messages)
+ - fetch messages for time period and list of accessible publishers (get_next_messages_from_publishers_within_timeframe)
+ - get config options (get_config)
+ - create IoMessage, encode(decode) to(from) raw bytes, marshall(unmarshall) into(from) JSON object (IoMessage class methods)
+ - connect to ioFog Control Channel via WebSocket (establish_control_ws_connection)
+ - connect to ioFog Message Channel via WebSocket (establish_message_ws_connection) and publish new message via this channel (post_message_via_socket)
 
 ## Code snippets: 
-Create ioMessage: 
+
+Install python package:
+```bash
+sudo python2 -m pip install iofog-container-sdk
+```
+
+Import iofog client and additional classes to your project:
 ```python
-msg=iofog.iomessage.IoMessage()
+from iofog_container_sdk.client import IoFogClient
+from iofog_container_sdk.exception import IoFogException
+from iofog_container_sdk.iomessage import IoMessage
+from iofog_container_sdk.listener import *
+```
+
+Create IoFog client with default settings:
+```python
+try:
+    client = IoFogClient()
+except IoFogException, e:
+ # client creation failed, e contains description
+```
+
+Or specify host, port, ssl and container id explicitly:
+```python
+try:
+    client = IoFogClient(id='container_id', host='iofog_host', port=6666)
+except IoFogException, e:
+ # client creation failed, e contains description
+```
+
+#### REST calls
+
+Get list of next unread IoMessages:
+```python
+try:
+    messages = client.get_next_messages()
+except IoFogException, e:
+ # some error occurred, e contains description
+```
+
+Post new IoMessage to ioFog via REST call:
+```python
+msg=IoMessage()
 msg.infotype="infotype"
 msg.infoformat="infoformat"
 msg.contentdata="sdkjhwrtiy8wrtgSDFOiuhsrgowh4touwsdhsDFDSKJhsdkljasjklweklfjwhefiauhw98p328946982weiusfhsdkufhaskldjfslkjdhfalsjdf=serg4towhr"
 msg.contextdata=""
 msg.tag="tag"
 msg.groupid="groupid"
-msg.sequencenumber=0
-msg.sequencetotal=0
-msg.priority=0
-msg.publisher="CONTAINER'S_ID"
 msg.authid="authid"
 msg.authgroup="authgroup"
-msg.chainposition=0
 msg.hash="hash"
 msg.previoushash="previoushash"
 msg.nonce="nonce"
-msg.difficultytarget=0
- ...
+
+try:
+    receipt = client.post_message(msg)
+except IoFogException, e:
+ # some error occurred, e contains description
 ```
 
-#### WEBSOCKET
-Import ioFog client and message util :
+Get an array of IoMessages from specified publishers within given timeframe:
 ```python
- import iofog.client
- import iofog.iomessage
- import iofog.byteutils
+query = {
+    	'timeframestart': 1234567890123,
+    	'timeframeend': 1234567890123,
+    	'publishers': ['sefhuiw4984twefsdoiuhsdf', 'd895y459rwdsifuhSDFKukuewf', 'SESD984wtsdidsiusidsufgsdfkh']
+}
+try:
+    query_response = client.get_next_messages_from_publishers_within_timeframe(query)
+except IoFogException, e:
+ # some error occurred, e contains description
 ```
-Set up a global variables for config and ws clients:
-```python
- config=None
- msgClient=None
- ctlClient=None
-```
-Implement a WS listener:
-```python
-class ioFogListener:
- 
-    def onConnected(self):
-        return
- 
-    def onClosed(self):
-        return
- 
-    def onMessage(self, msg):
-        print(msg)
-        #Do some stuff
- 
-    def onUpdateConfig(self, new_config):
-        config=new_config
-        
-    def onMessageReceipt(message_id, timestamp):
-        # in case it needs to be checked if message was sent successfully to ioFog via data socket
-        
-    def onError(error):
-        # triggered in case of any error with socket connection
-```
-Initialize a WS clients:
-```python
- host = iofog.client.get_host();
- listener = ioFogListener()
- 
- msgClient = iofog.client.Client("ws://" + host + ":54321/v2/control/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
- msgClient.connect()
- 
- ctlClient = iofog.client.Client("ws://" + host + ":54321/v2/message/socket/id/" + CONTAINER_ID, listener, CONTAINER_ID)
- ctlClient.connect()
-```
-It will start clients in a separate threads in async mode.
 
-#### REST
+Get container's config:
 ```python
- req = urllib2.Request("http://" + get_host() + ":54321/<URL>", "{\"id\":\"" + container_id + "\"}", {'Content-Type': 'application/json'})
- response = urllib2.urlopen(req)
- raw_msg=response.read()
+try:
+    config = client.get_config()
+except IoFogException, ex:
+ # some error occurred, e contains description
 ```
+
+
+#### WebSocket calls
+
+To use websocket connections you should implement listeners as follows:
+```python
+class MyControlListener(IoFogControlWsListener):
+    def on_control_signal(self):
+        # do smth on control signal
+
+
+class MyMessageListener(IoFogMessageWsListener):
+    def on_receipt(self, message_id, timestamp):
+        # do smth with message receipt
+
+    def on_message(self, io_msg):
+        # do smth with new message
+
+```
+
+After that you can establish websocket connections:
+```python
+client.establish_message_ws_connection(MyMessageListener())
+client.establish_control_ws_connection(MyControlListener())
+```
+Each of those connections will be managed in a separate thread.
+ 
+ 
+After successful connection to message websocket you can send to it:
+```python
+client.post_message_via_socket(io_msg_instance)
+```
+
+
 #### Message utils
-JSON to IoMessage:
+Construct IoMessage from JSON(both json string and python dictionary are acceptable):
 ```python
- msg=iofog.iomessage.json2message(json_msg, decode) // decode - flag which indicates if context and content data need to be decoded from base64 format
-```
+msg = IoMessage.from_json(json_msg)
+ ```
+
 IoMessage to JSON:
 ```python
- json_msg=iofog.iomessage.message2json(msg, encode) // decode - flag which indicates if context and content data need to be encoded to base64 format
+json_str = io_msg_instance.to_json()
 ```
-Byte Array to IoMessage:
+
+Construct IoMessage from raw bytes:
 ```python
- msg=iofog.iomessage.bytes2message(byte_array_msg)
+msg = IoMessage.from_bytearray([0, 4, ...])
 ```
-IoMessage To Byte Array:
+
+Pack IoMessage into bytearray:
 ```python
- byte_array_msg=iofog.iomessage.message2bytes(msg)
-```
-#### Examples
-Send message via REST:
-```python
-new_msg=iofog.iomessage.IoMessage()
-#set any fields you need to
-req = urllib2.Request("http://" + iofog.client.get_host() + ":54321/v2/messages/new", data=iofog.iomessage.message2json(new_msg, True), headers={"content-Type": "application/json"})
-response = urllib2.urlopen(req)
-responseJson = json.loads(response.read())
-```
-Send message via Socket:
-```python
-#initialize msgClient
-new_msg=iofog.iomessage.IoMessage()
-#set any fields you need to
-msgClient.send_message(new_msg)
+msg_bytes = io_msg_instance.to_bytearray()
 ```
