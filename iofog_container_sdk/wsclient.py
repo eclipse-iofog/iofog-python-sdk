@@ -26,7 +26,6 @@ class IoFogWsClient(WebSocketClient):
         self.listener = listener
         self.worker = None
         self.is_open = False
-        # self.ping_watcher = None
         super(IoFogWsClient, self).__init__(self.url_ws)
 
     def _reconnect(self, code=None, reason=None):
@@ -89,10 +88,6 @@ class IoFogWsClient(WebSocketClient):
     def opened(self):
         self.wsAttempt = 0
         self.is_open = True
-        # self.ping_watcher = threading.Thread(target=self.ping, args=(None,), name='ping watcher')
-        # self.ping_watcher.daemon = True
-        # self.ping_watcher.start()
-        # logger.info("WS is opened {}".format(threading.current_thread()))
 
     def connect(self):
         logger.debug('Starting connect')

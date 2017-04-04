@@ -90,7 +90,7 @@ Get container's config:
 try:
     config = client.get_config()
 except IoFogException, ex:
- # some error occurred, e contains description
+ # some error occurred, ex contains description
 ```
 
 
