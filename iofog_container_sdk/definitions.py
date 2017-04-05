@@ -5,6 +5,7 @@ SELFNAME = 'SELFNAME'
 SSL = 'SSL'
 SSL_DEFAULT = False
 HOST_DEFAULT = '127.0.0.1'
+IOFOG_LOGGER = 'iofog_logger'
 
 URL_GET_CONFIG = '/v2/config/get'
 URL_GET_NEXT_MESSAGES = '/v2/messages/next'

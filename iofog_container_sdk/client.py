@@ -10,19 +10,22 @@ from wsclient import IoFogControlWsClient, IoFogMessageWsClient
 from listener import *
 from exception import *
 
-parser = argparse.ArgumentParser(description='This is a demo.')
+parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--log", dest="logLevel", choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
                     help="Set the logging level", default='INFO')
-
 args = parser.parse_args()
-
-logging.basicConfig(format='%(levelname)5s [%(asctime)-15s] %(module)10s - <Thread: %(threadName)15s> - %(message)s',
-                    level=args.logLevel)
-logger = logging.getLogger(__name__)
 
 
 class IoFogClient:
     def __init__(self, id=None, ssl=None, host=None, port=None):
+        self.logger = logging.getLogger(IOFOG_LOGGER)
+        self.logger.setLevel(args.logLevel)
+        ch = logging.StreamHandler()
+        ch.setLevel(args.logLevel)
+        formatter = logging.Formatter(
+            '%(levelname)5s [%(asctime)-15s] %(module)10s - <Thread: %(threadName)15s> - %(message)s')
+        ch.setFormatter(formatter)
+        self.logger.addHandler(ch)
         if id:
             self.id = id
         else:
@@ -36,8 +39,8 @@ class IoFogClient:
         else:
             self.ssl = os.getenv(SSL)
             if not self.ssl:
-                logger.info('Empty or malformed ' + SSL
-                            + ' environment variable. Using default value of ' + str(SSL_DEFAULT))
+                self.logger.info('Empty or malformed ' + SSL
+                                 + ' environment variable. Using default value of ' + str(SSL_DEFAULT))
                 self.ssl = SSL_DEFAULT
 
         if host:
@@ -47,7 +50,7 @@ class IoFogClient:
             with open(os.devnull, 'w') as FNULL:
                 resp = subprocess.call(['ping', '-c', '3', self.host], stdout=FNULL, stderr=FNULL)
             if resp:
-                logger.info('Host ' + IOFOG + ' is unreachable. Switching to ' + HOST_DEFAULT)
+                self.logger.info('Host ' + IOFOG + ' is unreachable. Switching to ' + HOST_DEFAULT)
                 self.host = HOST_DEFAULT
 
         self.port = port if port else PORT_IOFOG

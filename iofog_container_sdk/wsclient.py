@@ -9,10 +9,6 @@ from definitions import *
 from ws4py.client.threadedclient import WebSocketClient
 from ws4py.framing import OPCODE_PONG
 
-logger = logging.getLogger(__name__)
-
-
-# todo invoke listener in different thread???
 
 class IoFogWsClient(WebSocketClient):
     def __init__(self, container_id, ssl, host, port, url, listener):
@@ -20,6 +16,7 @@ class IoFogWsClient(WebSocketClient):
         if ssl:
             protocol_ws = WSS
 
+        self.logger = logging.getLogger(IOFOG_LOGGER)
         self.url_base_ws = '{}://{}:{}'.format(protocol_ws, host, port)
         self.url_ws = self.url_base_ws + url + container_id
         self.wsAttempt = 0
@@ -30,7 +27,7 @@ class IoFogWsClient(WebSocketClient):
 
     def _reconnect(self, code=None, reason=None):
         self.is_open = False
-        logger.info("WebSocket connection is closed{}{}. Reconnecting...".format(
+        self.logger.info('WebSocket connection is closed{}{}. Reconnecting...'.format(
             '' if not code else ' with code {}'.format(code),
             '' if not reason else '({})'.format(reason)))
         sleep_time = 1 << self.wsAttempt * WS_CONNECT_TIMEOUT
@@ -51,7 +48,7 @@ class IoFogWsClient(WebSocketClient):
         self.reading_buffer_size = s.parser.send(bytes) or DEFAULT_READING_SIZE
 
         if s.closing is not None:
-            logger.debug("Closing message received (%d) '%s'" % (s.closing.code, s.closing.reason))
+            self.logger.debug("Closing message received (%d) '%s'" % (s.closing.code, s.closing.reason))
             if not self.server_terminated:
                 self.close(s.closing.code, s.closing.reason)
             else:
@@ -60,7 +57,7 @@ class IoFogWsClient(WebSocketClient):
 
         if s.errors:
             for error in s.errors:
-                logger.debug("Error message received (%d) '%s'" % (error.code, error.reason))
+                self.logger.debug("Error message received (%d) '%s'" % (error.code, error.reason))
                 self.close(error.code, error.reason)
             s.errors = []
             return False
@@ -74,7 +71,7 @@ class IoFogWsClient(WebSocketClient):
 
         if s.pings:
             for _ in s.pings:
-                logger.debug('Got ping from iofog')
+                self.logger.debug('Got ping from iofog')
                 self._write(s.pong(bytearray([OPCODE_PONG])))
             s.pings = []
 
@@ -90,12 +87,12 @@ class IoFogWsClient(WebSocketClient):
         self.is_open = True
 
     def connect(self):
-        logger.debug('Starting connect')
+        self.logger.debug('Starting connect')
         self.worker = threading.Thread(target=self._serve, name='WS Server')
         self.worker.start()
 
     def _serve(self):
-        logger.debug('Starting serving')
+        self.logger.debug('Starting serving')
         while True:
             try:
                 super(IoFogWsClient, self).connect()
@@ -103,7 +100,7 @@ class IoFogWsClient(WebSocketClient):
                 self._reconnect(reason=e.message)
                 continue
             self.run_forever()
-            logger.debug('Loop exited')
+            self.logger.debug('Loop exited')
             super(IoFogWsClient, self).__init__(self.url_ws)
             self._reconnect(reason='Connection terminated')
 
@@ -115,7 +112,7 @@ class IoFogControlWsClient(IoFogWsClient):
     def received_message(self, message):
         opt_code = bytearray(message.data)[0]
         if opt_code == CODE_CONTROL_SIGNAL:
-            logger.debug('Received control')
+            self.logger.debug('Received control')
             self.listener.on_control_signal()
             self.send(bytearray([CODE_ACK]), binary=True)
 
@@ -128,7 +125,7 @@ class IoFogMessageWsClient(IoFogWsClient):
         data = bytearray(message.data)
         opt_code = data[0]
         if opt_code == CODE_MSG:
-            logger.debug('Received message')
+            self.logger.debug('Received message')
             msg_data = data[5:]
             if len(msg_data) == 0:
                 return
@@ -136,7 +133,7 @@ class IoFogMessageWsClient(IoFogWsClient):
             self.send(bytearray([CODE_ACK]), binary=True)
             self.listener.on_message(msg)
         elif opt_code == CODE_RECEIPT:
-            logger.debug('Received receipt')
+            self.logger.debug('Received receipt')
             receipt_data = data[1:]
             if len(receipt_data) == 0:
                 return
@@ -150,6 +147,6 @@ class IoFogMessageWsClient(IoFogWsClient):
             self.listener.on_receipt(message_id, timestamp)
 
     def send_message(self, io_msg):
-        logger.debug('Sending message')
+        self.logger.debug('Sending message')
         self.send(util.prepare_iomessage_for_sending_via_socket(io_msg), binary=True)
-        logger.debug('Sent message')
+        self.logger.debug('Sent message')
