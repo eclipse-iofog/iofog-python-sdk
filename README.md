@@ -1,4 +1,4 @@
-# iofog-sdk-python
+# iofog-python-sdk
 
 This module lets you easily build an ioElement. It gives you all the functionality to interact with ioFog via Local API. It contains all necessary methods for IoMessage transformation as well.
 
