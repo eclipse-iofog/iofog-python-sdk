@@ -1,4 +1,4 @@
-# container-sdk-python
+# iofog-sdk-python
 
 This module lets you easily build an ioElement. It gives you all the functionality to interact with ioFog via Local API. It contains all necessary methods for IoMessage transformation as well.
 
@@ -14,15 +14,15 @@ This module lets you easily build an ioElement. It gives you all the functionali
 
 Install python package:
 ```bash
-sudo python2 -m pip install iofog-container-sdk
+sudo python2 -m pip install iofog-python-sdk
 ```
 
 Import iofog client and additional classes to your project:
 ```python
-from iofog_container_sdk.client import IoFogClient
-from iofog_container_sdk.exception import IoFogException
-from iofog_container_sdk.iomessage import IoMessage
-from iofog_container_sdk.listener import *
+from iofog_python_sdk.client import IoFogClient
+from iofog_python_sdk.exception import IoFogException
+from iofog_python_sdk.iomessage import IoMessage
+from iofog_python_sdk.listener import *
 ```
 
 Create IoFog client with default settings:
