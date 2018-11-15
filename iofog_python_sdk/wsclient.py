@@ -13,9 +13,9 @@ import threading
 
 import time
 
-import util
-from iomessage import IoMessage
-from definitions import *
+import iofog_python_sdk.util as util
+from iofog_python_sdk.iomessage import IoMessage
+from iofog_python_sdk.definitions import *
 from ws4py.client.threadedclient import WebSocketClient
 from ws4py.framing import OPCODE_PONG
 

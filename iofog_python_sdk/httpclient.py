@@ -11,10 +11,10 @@
 import json
 from urllib import error as urlerror
 
-from definitions import *
-from util import make_post_request
-from iomessage import IoMessage
-from exception import IoFogHttpException
+from iofog_python_sdk.definitions import *
+from iofog_python_sdk.util import make_post_request
+from iofog_python_sdk.iomessage import IoMessage
+from iofog_python_sdk.exception import IoFogHttpException
 
 
 class IoFogHttpClient:
