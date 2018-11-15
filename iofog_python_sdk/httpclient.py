@@ -9,7 +9,7 @@
 #********************************************************************************
 
 import json
-import urllib2
+from urllib import error as urlerror
 
 from definitions import *
 from util import make_post_request
@@ -35,14 +35,14 @@ class IoFogHttpClient:
     def get_config(self):
         try:
             config_resp = make_post_request(self.url_get_config, APPLICATION_JSON, self.request_body_id)
-        except urllib2.HTTPError as e:
+        except urlerror.HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
         return json.loads(config_resp[CONFIG])
 
     def get_next_messages(self):
         try:
             next_messages_resp = make_post_request(self.url_get_next_messages, APPLICATION_JSON, self.request_body_id)
-        except urllib2.HTTPError as e:
+        except urlerror.HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
         messages = []
         for json_msg in next_messages_resp[MESSAGES]:
@@ -53,7 +53,7 @@ class IoFogHttpClient:
         try:
             next_messages_resp = make_post_request(self.url_get_publishers_messages, APPLICATION_JSON,
                                                    json.dumps(query))
-        except urllib2.HTTPError as e:
+        except urlerror.HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
         response = {
             TIME_FRAME_START: next_messages_resp[TIME_FRAME_START],
@@ -70,5 +70,5 @@ class IoFogHttpClient:
             post_resp = make_post_request(self.url_post_message, APPLICATION_JSON, io_msg.to_json())
             del post_resp[STATUS]
             return post_resp
-        except urllib2.HTTPError as e:
+        except urlerror.HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
