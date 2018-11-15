@@ -29,7 +29,7 @@ Create IoFog client with default settings:
 ```python
 try:
     client = IoFogClient()
-except IoFogException, e:
+except IoFogException as e:
  # client creation failed, e contains description
 ```
 
@@ -37,7 +37,7 @@ Or specify host, port, ssl and container id explicitly:
 ```python
 try:
     client = IoFogClient(id='container_id', host='iofog_host', port=6666)
-except IoFogException, e:
+except IoFogException as e:
  # client creation failed, e contains description
 ```
 
@@ -47,7 +47,7 @@ Get list of next unread IoMessages:
 ```python
 try:
     messages = client.get_next_messages()
-except IoFogException, e:
+except IoFogException as e:
  # some error occurred, e contains description
 ```
 
