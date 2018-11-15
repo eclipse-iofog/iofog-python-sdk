@@ -106,7 +106,7 @@ class IoFogWsClient(WebSocketClient):
         while True:
             try:
                 super(IoFogWsClient, self).connect()
-            except Exception, e:
+            except Exception as e:
                 self._reconnect(reason=e.message)
                 continue
             self.run_forever()
