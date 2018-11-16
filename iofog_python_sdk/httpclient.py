@@ -9,12 +9,16 @@
 #********************************************************************************
 
 import json
-import urllib2
 
-from definitions import *
-from util import make_post_request
-from iomessage import IoMessage
-from exception import IoFogHttpException
+try:
+    from urllib.error import HTTPError #for python 3
+except ImportError:
+    from urllib2 import HTTPError #for python 2
+
+from iofog_python_sdk.definitions import *
+from iofog_python_sdk.util import make_post_request
+from iofog_python_sdk.iomessage import IoMessage
+from iofog_python_sdk.exception import IoFogHttpException
 
 
 class IoFogHttpClient:
@@ -35,14 +39,14 @@ class IoFogHttpClient:
     def get_config(self):
         try:
             config_resp = make_post_request(self.url_get_config, APPLICATION_JSON, self.request_body_id)
-        except urllib2.HTTPError, e:
+        except HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
         return json.loads(config_resp[CONFIG])
 
     def get_next_messages(self):
         try:
             next_messages_resp = make_post_request(self.url_get_next_messages, APPLICATION_JSON, self.request_body_id)
-        except urllib2.HTTPError, e:
+        except HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
         messages = []
         for json_msg in next_messages_resp[MESSAGES]:
@@ -53,7 +57,7 @@ class IoFogHttpClient:
         try:
             next_messages_resp = make_post_request(self.url_get_publishers_messages, APPLICATION_JSON,
                                                    json.dumps(query))
-        except urllib2.HTTPError, e:
+        except HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
         response = {
             TIME_FRAME_START: next_messages_resp[TIME_FRAME_START],
@@ -70,5 +74,5 @@ class IoFogHttpClient:
             post_resp = make_post_request(self.url_post_message, APPLICATION_JSON, io_msg.to_json())
             del post_resp[STATUS]
             return post_resp
-        except urllib2.HTTPError, e:
+        except HTTPError as e:
             raise IoFogHttpException(e.code, e.read())

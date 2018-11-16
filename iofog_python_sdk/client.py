@@ -14,11 +14,11 @@ import os
 
 import subprocess
 
-from httpclient import IoFogHttpClient
-from definitions import *
-from wsclient import IoFogControlWsClient, IoFogMessageWsClient
-from listener import *
-from exception import *
+from iofog_python_sdk.httpclient import IoFogHttpClient
+from iofog_python_sdk.definitions import *
+from iofog_python_sdk.wsclient import IoFogControlWsClient, IoFogMessageWsClient
+from iofog_python_sdk.listener import *
+from iofog_python_sdk.exception import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--log", dest="logLevel", choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
@@ -90,13 +90,13 @@ class IoFogClient:
     def get_config(self):
         try:
             return self.http_client.get_config()
-        except Exception, e:
+        except Exception as e:
             raise IoFogException(e)
 
     def get_next_messages(self):
         try:
             return self.http_client.get_next_messages()
-        except Exception, e:
+        except Exception as e:
             raise IoFogException(e)
 
     def get_next_messages_from_publishers_within_timeframe(self, query):
@@ -104,7 +104,7 @@ class IoFogClient:
         query[ID] = self.id
         try:
             return self.http_client.get_next_messages_from_publishers_within_timeframe(query)
-        except Exception, e:
+        except Exception as e:
             raise IoFogException(e)
 
     def post_message(self, io_msg):
@@ -113,7 +113,7 @@ class IoFogClient:
         io_msg.publisher = self.id
         try:
             return self.http_client.post_message(io_msg)
-        except Exception, e:
+        except Exception as e:
             raise IoFogException(e)
 
     def post_message_via_socket(self, io_msg):
@@ -128,5 +128,5 @@ class IoFogClient:
             io_msg.version = IO_MESSAGE_VERSION
         try:
             self.message_ws_client.send_message(io_msg)
-        except Exception, e:
+        except Exception as e:
             raise IoFogException(e)

@@ -10,9 +10,14 @@
 
 import json
 import math
-import urllib2
-from definitions import CODE_MSG
+
+try:
+    import urllib.request as urllib_request #for python 3
+except ImportError:
+    import urllib2 as urllib_request # for python 2
+
 from struct import pack
+from iofog_python_sdk.definitions import CODE_MSG
 
 
 def num_to_bytearray(num):
@@ -23,7 +28,7 @@ def num_to_bytearray(num):
     num_of_bytes = int(math.ceil(num_of_bits / 8.0))
     b = bytearray(num_of_bytes)
     shift = 8 * (num_of_bytes - 1)
-    for i in xrange(num_of_bytes):
+    for i in range(num_of_bytes):
         b[i] = (num >> shift) & 0xFF
         shift -= 8
     return b, num_of_bytes
@@ -39,8 +44,8 @@ def bytearray_to_num(arr):
 
 
 def make_post_request(url, body_type, body):
-    req = urllib2.Request(url, body, {'Content-Type': body_type})
-    response = urllib2.urlopen(req)
+    req = urllib_request.Request(url, body, {'Content-Type': body_type})
+    response = urllib_request.urlopen(req)
     return json.loads(response.read())
 
 
