@@ -12,7 +12,7 @@ from distutils.core import setup
 
 setup(
     name='iofog-python-sdk',
-    version='0.0.1',
+    version='0.0.2',
     project_urls={
         'Documentation': 'https://github.com/ioFog/iofog-python-sdk/blob/master/README.md',
         'Source': 'https://github.com/ioFog/iofog-python-sdk.git',
