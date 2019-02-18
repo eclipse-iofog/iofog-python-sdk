@@ -53,67 +53,67 @@ class IoMessage:
         header.extend(pack('>H', self.version))
         # id
         header.extend(pack('>B', len(self.id)))
-        body.extend(self.id)
+        body.extend(self.id.encode())
         # tag
         header.extend(pack('>H', len(self.tag)))
-        body.extend(self.tag)
+        body.extend(self.tag.encode())
         # group id
         header.extend(pack('>B', len(self.groupid)))
-        body.extend(self.groupid)
+        body.extend(self.groupid.encode())
         # sequence number
         byte_num, byte_num_len = num_to_bytearray(self.sequencenumber)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num)
+        body.extend(byte_num.encode())
         # sequence total
         byte_num, byte_num_len = num_to_bytearray(self.sequencetotal)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num)
+        body.extend(byte_num.encode())
         # priority
         byte_num, byte_num_len = num_to_bytearray(self.priority)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num)
+        body.extend(byte_num.encode())
         # timestamp
         byte_num, byte_num_len = num_to_bytearray(self.timestamp)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num)
+        body.extend(byte_num.encode())
         # publisher
         header.extend(pack('>B', len(self.publisher)))
-        body.extend(self.publisher)
+        body.extend(self.publisher.encode())
         # auth id
         header.extend(pack('>H', len(self.authid)))
-        body.extend(self.authid)
+        body.extend(self.authid.encode())
         # auth group
         header.extend(pack('>H', len(self.authgroup)))
-        body.extend(self.authgroup)
+        body.extend(self.authgroup.encode())
         # chain position
         byte_num, byte_num_len = num_to_bytearray(self.chainposition)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num)
+        body.extend(byte_num.encode())
         # hash
         header.extend(pack('>H', len(self.hash)))
-        body.extend(self.hash)
+        body.extend(self.hash.encode())
         # previous hash
         header.extend(pack('>H', len(self.previoushash)))
-        body.extend(self.previoushash)
+        body.extend(self.previoushash.encode())
         # nonce
         header.extend(pack('>H', len(self.nonce)))
-        body.extend(self.nonce)
+        body.extend(self.nonce.encode())
         # difficulty target
         byte_num, byte_num_len = num_to_bytearray(self.difficultytarget)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num)
+        body.extend(byte_num.encode())
         # info type
         header.extend(pack('>B', len(self.infotype)))
-        body.extend(self.infotype)
+        body.extend(self.infotype.encode())
         # info format
         header.extend(pack('>B', len(self.infoformat)))
-        body.extend(self.infoformat)
+        body.extend(self.infoformat.encode())
         # context data
         header.extend(pack('>I', len(self.contextdata)))
-        body.extend(self.contextdata)
+        body.extend(self.contextdata.encode())
         # content data
         header.extend(pack('>I', len(self.contentdata)))
-        body.extend(self.contentdata)
+        body.extend(self.contentdata.encode())
 
         return header + body
 
