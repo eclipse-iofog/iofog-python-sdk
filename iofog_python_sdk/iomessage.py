@@ -227,10 +227,10 @@ class IoMessage:
         msg.infoformat = json_msg.get(INFO_FORMAT, '')
         contextdata = json_msg.get(CONTEXT_DATA, '')
         contextdata = base64.b64decode(contextdata)
-        msg.contextdata = bytearray(contextdata)
+        msg.contextdata = str.encode(contextdata)
         contentdata = json_msg.get(CONTENT_DATA, '')
         contentdata = base64.b64decode(contentdata)
-        msg.contentdata = bytearray(contentdata)
+        msg.contentdata = str.encode(contentdata)
         return msg
 
     def to_json(self):
