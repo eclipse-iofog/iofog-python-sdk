@@ -7,4 +7,6 @@ else
   PYTHON_TAG="2.7-stretch"
 fi
 
-echo "Works"
+# Build Python Images
+docker build --build-arg TAG_NAME=${PYTHON_TAG} -t iofog/test-python-sdk-send:${PYTHON_VERSION} -f ./Docker/Dockerfile.send .
+docker build --build-arg TAG_NAME=${PYTHON_TAG} -t iofog/test-python-sdk-recieve:${PYTHON_VERSION} -f ./Docker/Dockerfile.recieve .
