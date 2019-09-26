@@ -12,7 +12,7 @@ from distutils.core import setup
 
 setup(
     name='iofog-python-sdk',
-    version='1.0.0',
+    version='1.3.0',
     project_urls={
         'Documentation': 'https://github.com/ioFog/iofog-python-sdk/blob/master/README.md',
         'Source': 'https://github.com/ioFog/iofog-python-sdk.git',
@@ -25,6 +25,6 @@ setup(
     author='Eclipse ioFog',
     author_email='edgemaster@iofog.org',
     description='Native python SDK for Eclipse ioFog development.',
-    requires=['ws4py'],
+    requires=['ws4py, json, requests'],
     keywords='iofog IoT Eclipse fog computing edgeworx',
 )
