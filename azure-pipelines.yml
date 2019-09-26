@@ -17,7 +17,7 @@ jobs:
   pool:
     vmImage: 'ubuntu-16.04'
   steps:
-    - task: UsePythonVersion-3.x@1
+    - task: UsePythonVersion@0
       inputs:
         versionSpec: '3.5'
         addToPath: true
@@ -28,7 +28,7 @@ jobs:
     - script: |
         bash ./test.sh
       displayName: 'Testing-3.x'
-    - task: UsePythonVersion-2.7@1
+    - task: UsePythonVersion@0
       inputs:
         versionSpec: '2.7'
         addToPath: true
