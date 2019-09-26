@@ -146,3 +146,20 @@ Pack IoMessage into bytearray:
 ```python
 msg_bytes = io_msg_instance.to_bytearray()
 ```
+
+#### Scheduling Microservices and adding to catalogs
+
+You can interact with any deployed ioFog you have now through some functions that will
+help in deploying full ECN's and microservices, as well as let you edit and change what is currently running
+as well as any yml deployment configurations you have.
+
+
+ex: Creating a route within ioFog from python
+```python
+from iofog_python_sdk.create_rest_call import rest_call
+
+post_address = "{}/microservices/{}/routes/{}".format(controller_address, route["from"], route["to"])
+json_response = rest_call({}, post_address, auth_token).response
+```
+
+You can find relevant API endpoints at [the ioFog Website](http://iofog.org) under Documentation
