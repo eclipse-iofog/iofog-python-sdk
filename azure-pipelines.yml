@@ -1,0 +1,41 @@
+trigger:
+  branches:
+    include:
+      - master
+      - develop
+  paths:
+    exclude:
+      - README.md
+
+pr: none
+
+variables:
+  group: 'pipelines'
+
+jobs:
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+    - task: UsePythonVersion-3.x
+      inputs:
+        versionSpec: '3.5'
+        addToPath: true
+        architecture: 'x64'
+    - script: |
+        bash ./build.sh 'python3'
+      displayName: 'Building-3.x'
+    - script: |
+        bash ./test.sh
+      displayName: 'Testing-3.x'
+    - task: UsePythonVersion-2.7
+      inputs:
+        versionSpec: '2.7'
+        addToPath: true
+        architecture: 'x64'
+    - script: |
+        bash ./build.sh
+      displayName: 'Building-2.7'
+    - script: |
+        bash ./test.sh
+      displayName: 'Testing-2.7'
