@@ -1,5 +1,16 @@
 # iofog-python-sdk
 
+This SDK is divided in two parts: client and deploy.
+
+## Installation
+
+Install python package:
+```bash
+sudo python2 -m pip install iofog-python-sdk
+```
+
+## Client
+
 This module lets you easily build an ioElement. It gives you all the functionality to interact with ioFog via Local API. It contains all necessary methods for IoMessage transformation as well.
 
  - send new message to ioFog (post_message)
@@ -10,12 +21,7 @@ This module lets you easily build an ioElement. It gives you all the functionali
  - connect to ioFog Control Channel via WebSocket (establish_control_ws_connection)
  - connect to ioFog Message Channel via WebSocket (establish_message_ws_connection) and publish new message via this channel (post_message_via_socket)
 
-## Code snippets: 
-
-Install python package:
-```bash
-sudo python2 -m pip install iofog-python-sdk
-```
+### Code snippets: 
 
 Import iofog client and additional classes to your project:
 ```python
@@ -41,7 +47,7 @@ except IoFogException as e:
  # client creation failed, e contains description
 ```
 
-#### REST calls
+##### REST calls
 
 Get list of next unread IoMessages:
 ```python
@@ -94,7 +100,7 @@ except IoFogException, ex:
 ```
 
 
-#### WebSocket calls
+##### WebSocket calls
 
 To use websocket connections you should implement listeners as follows:
 ```python
@@ -126,7 +132,7 @@ client.post_message_via_socket(io_msg_instance)
 ```
 
 
-#### Message utils
+##### Message utils
 Construct IoMessage from JSON(both json string and python dictionary are acceptable):
 ```python
 msg = IoMessage.from_json(json_msg)
@@ -146,20 +152,49 @@ Pack IoMessage into bytearray:
 ```python
 msg_bytes = io_msg_instance.to_bytearray()
 ```
+## Deploy
 
-#### Scheduling Microservices and adding to catalogs
+This module lets you easily communicate with the [Controller REST API](https://iofog.org/docs/1.3.0/controllers/rest-api.html).
 
-You can interact with any deployed ioFog you have now through some functions that will
-help in deploying full ECN's and microservices, as well as let you edit and change what is currently running
-as well as any yml deployment configurations you have.
-
-
-ex: Creating a route within ioFog from python
+ - Deploy flow, microservices, agents, etc.
+ - Edit microservice configuration
+ - Edit flow routing
+ 
+ ### Code snippets
+ 
+Import iofog deploy client
 ```python
 from iofog_python_sdk.deploy.create_rest_call import rest_call
-
-post_address = "{}/microservices/{}/routes/{}".format(controller_ip_address, route["from"], route["to"])
-json_response = rest_call({}, post_address, auth_token).response
+from iofog_python_sdk.deploy.microservice_service import microservices
 ```
 
-You can find relevant API endpoints at [the ioFog Website](http://iofog.org) under Documentation
+Update microservice config
+```python
+controller_address = http://localhost:51121/api/v3
+microservice_service = microservices()
+
+def iofog_auth(controller_address, email, password):
+    data = {}
+    data["email"] = email
+    data["password"] = password
+    post_address = "{}/user/login".format(controller_address)
+    jsonResponse = rest_call(data, post_address)
+    auth_token = jsonResponse["accessToken"]
+    return auth_token
+
+auth_token = iofog_auth(controller_address, "user@domain.com", "myPassword")
+flow_id = 1
+current_microservice = microservice_service.get_microservice_by_name(controller_address, "my_microservice", flow_id, auth_token)
+
+updated_microservice = current_microservice
+updated_microservice.config = {"newKey": 42}
+
+microservice_service.update_microservice(controller_address, updated_microservice, current_microservice.iofogUuid, catalog_id, auth_token)
+
+```
+
+#### Disclaimer
+
+This module is very much a Work In Progress. It was first written as a set of helper functions used by a python script to deploy a set of microservices configured using yaml files.
+
+Our [golang SDK](https://github.com/eclipse-iofog/iofog-go-sdk) is more adapted and modular for communicating with the Controller REST API
