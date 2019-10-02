@@ -19,10 +19,10 @@ sudo python2 -m pip install iofog-python-sdk
 
 Import iofog client and additional classes to your project:
 ```python
-from iofog_python_sdk.client import IoFogClient
-from iofog_python_sdk.exception import IoFogException
-from iofog_python_sdk.iomessage import IoMessage
-from iofog_python_sdk.listener import *
+from iofog_python_sdk.client.client import IoFogClient
+from iofog_python_sdk.client.exception import IoFogException
+from iofog_python_sdk.client.iomessage import IoMessage
+from iofog_python_sdk.client.listener import *
 ```
 
 Create IoFog client with default settings:
@@ -156,9 +156,9 @@ as well as any yml deployment configurations you have.
 
 ex: Creating a route within ioFog from python
 ```python
-from iofog_python_sdk.create_rest_call import rest_call
+from iofog_python_sdk.deploy.create_rest_call import rest_call
 
-post_address = "{}/microservices/{}/routes/{}".format(controller_address, route["from"], route["to"])
+post_address = "{}/microservices/{}/routes/{}".format(controller_ip_address, route["from"], route["to"])
 json_response = rest_call({}, post_address, auth_token).response
 ```
 

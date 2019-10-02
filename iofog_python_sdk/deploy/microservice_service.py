@@ -1,8 +1,8 @@
 import json
 
-from iofog_python_sdk.create_rest_call import rest_call
-from iofog_python_sdk.pretty_print import print_info, print_error
-from iofog_python_sdk.flow_service import Flow
+from iofog_python_sdk.deploy.create_rest_call import rest_call
+from iofog_python_sdk.deploy.pretty_print import print_info, print_error
+from iofog_python_sdk.deploy.flow_service import Flow
 
 class microservices:
     def __init__(self):

@@ -8,7 +8,7 @@
 #  SPDX-License-Identifier: EPL-2.0
 #********************************************************************************
 
-from iofog_python_sdk.create_rest_call import rest_call
+from iofog_python_sdk.deploy.create_rest_call import rest_call
 
 class agent_service:
     def get_agent_per_microservice(controller_address, auth_token, microservices):

@@ -15,10 +15,10 @@ try:
 except ImportError:
     from urllib2 import HTTPError #for python 2
 
-from iofog_python_sdk.definitions import *
-from iofog_python_sdk.util import make_post_request
-from iofog_python_sdk.iomessage import IoMessage
-from iofog_python_sdk.exception import IoFogHttpException
+from iofog_python_sdk.client.definitions import *
+from iofog_python_sdk.client.util import make_post_request
+from iofog_python_sdk.client.iomessage import IoMessage
+from iofog_python_sdk.client.exception import IoFogHttpException
 
 
 class IoFogHttpClient:

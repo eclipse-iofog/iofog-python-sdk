@@ -1,4 +1,4 @@
-from iofog_python_sdk.create_rest_call import rest_call
+from iofog_python_sdk.deploy.create_rest_call import rest_call
 import time
 
 

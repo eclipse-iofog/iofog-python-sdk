@@ -1,6 +1,6 @@
-from iofog_python_sdk.create_rest_call import rest_call
-from iofog_python_sdk.pretty_print import print_info
-from iofog_python_sdk.microservice_service import microservices as msv
+from iofog_python_sdk.deploy.create_rest_call import rest_call
+from iofog_python_sdk.deploy.pretty_print import print_info
+from iofog_python_sdk.deploy.microservice_service import microservices as msv
 
 
 class catalog_service:

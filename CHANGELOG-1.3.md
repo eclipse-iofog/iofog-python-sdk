@@ -3,9 +3,10 @@
 ## Added
 
 * Ability to deploy ioFog microservices, and connections through SDK are now available.
-* Added standards for rest calls made to ioFog under create_rest_call.py
+    * This can be imported through iofog_python_sdk.deploy options.
+    * Previous standard iofog_python_sdk can be imported through iofog_python_sdk.client
+* Added standards for rest calls made to ioFog under deploy.create_rest_call
 * Fixed issue with python3 object handling
 
-## Removed
 
 ## Known Issues

@@ -2,7 +2,7 @@ import requests
 import json
 
 from requests.exceptions import HTTPError
-from iofog_python_sdk.pretty_print import *
+from iofog_python_sdk.deploy.pretty_print import *
 
 class rest_call:
     #
