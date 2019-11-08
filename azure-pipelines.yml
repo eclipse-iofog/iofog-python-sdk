@@ -51,4 +51,10 @@ jobs:
           requirements.txt
           iofog_python_sdk/**/*
         OverWrite: true
-      displayName: 'Publish artifacts'
+      displayName: 'Copy artifacts'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'sdk'
+      displayName: 'Publish artefacts'
+
