@@ -37,7 +37,7 @@ jobs:
         addToPath: true
         architecture: 'x64'
     - script: |
-        bash ./build.sh
+        bash ./build.sh 'python2'
       displayName: 'Building-2.7'
     - script: |
         bash ./test.sh
