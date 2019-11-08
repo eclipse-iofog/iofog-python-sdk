@@ -49,6 +49,7 @@ jobs:
         Contents: |
           setup.py
           requirements.txt
+          README.md
           iofog_python_sdk/**/*
         OverWrite: true
       displayName: 'Copy artifacts'

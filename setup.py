@@ -8,23 +8,27 @@
 #  SPDX-License-Identifier: EPL-2.0
 #********************************************************************************
 
-from distutils.core import setup
+import setuptools
 
-setup(
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setuptools.setup(
     name='iofog-python-sdk',
     version='1.3.0',
     project_urls={
-        'Documentation': 'https://github.com/ioFog/iofog-python-sdk/blob/master/README.md',
-        'Source': 'https://github.com/ioFog/iofog-python-sdk.git',
-        'Tracker': 'https://github.com/ioFog/iofog-python-sdk/issues',
+        'Documentation': 'https://github.com/eclipse-iofog/iofog-python-sdk/blob/master/README.md',
+        'Source': 'https://github.com/eclipse-iofog/iofog-python-sdk.git',
+        'Tracker': 'https://github.com/eclipse-iofog/iofog-python-sdk/issues',
         'Eclipse ioFog': 'http://iofog.org'
     },
     packages=['iofog_python_sdk'],
-    url='https://github.com/ioFog/iofog-python-sdk',
+    url='https://github.com/eclipse-iofog/iofog-python-sdk',
     license='EPL-2.0',
     author='Eclipse ioFog',
     author_email='edgemaster@iofog.org',
     description='Native python SDK for Eclipse ioFog development.',
-    requires=['ws4py, json, requests'],
-    keywords='iofog IoT Eclipse fog computing edgeworx',
+    long_description=long_description,
+    requires=['ws4py', 'json', 'requests'],
+    keywords='ioFog IoT Eclipse fog computing edgeworx',
 )
