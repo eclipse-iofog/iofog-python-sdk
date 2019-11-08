@@ -27,10 +27,10 @@ jobs:
         architecture: 'x64'
     - script: |
         bash ./build.sh 'python3'
-      displayName: 'Building-3.x'
+      displayName: 'Building 3.x'
     - script: |
         bash ./test.sh 'python3'
-      displayName: 'Testing-3.x'
+      displayName: 'Testing 3.x'
     - task: UsePythonVersion@0
       inputs:
         versionSpec: '2.7'
@@ -38,7 +38,17 @@ jobs:
         architecture: 'x64'
     - script: |
         bash ./build.sh 'python2'
-      displayName: 'Building-2.7'
+      displayName: 'Building 2.7'
     - script: |
         bash ./test.sh 'python2'
-      displayName: 'Testing-2.7'
+      displayName: 'Testing 2.7'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: $(System.DefaultWorkingDirectory)
+        TargetFolder: $(Build.ArtifactStagingDirectory)
+        Contents: |
+          setup.py
+          requirements.txt
+          iofog_python_sdk
+        OverWrite: true
+      displayName: 'Publish artifacts'
