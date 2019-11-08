@@ -1,8 +1,11 @@
 trigger:
+  tags:
+    include:
+      - v*
   branches:
     include:
-      - master
       - develop
+      - release*
   paths:
     exclude:
       - README.md
