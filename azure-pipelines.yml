@@ -49,6 +49,6 @@ jobs:
         Contents: |
           setup.py
           requirements.txt
-          'iofog_python_sdk/**'
+          iofog_python_sdk/**/*
         OverWrite: true
       displayName: 'Publish artifacts'
