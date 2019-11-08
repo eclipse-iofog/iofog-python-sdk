@@ -29,7 +29,7 @@ jobs:
         bash ./build.sh 'python3'
       displayName: 'Building-3.x'
     - script: |
-        bash ./test.sh
+        bash ./test.sh 'python3'
       displayName: 'Testing-3.x'
     - task: UsePythonVersion@0
       inputs:
@@ -40,5 +40,5 @@ jobs:
         bash ./build.sh 'python2'
       displayName: 'Building-2.7'
     - script: |
-        bash ./test.sh
+        bash ./test.sh 'python2'
       displayName: 'Testing-2.7'
