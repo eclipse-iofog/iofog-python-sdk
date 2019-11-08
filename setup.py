@@ -29,6 +29,7 @@ setuptools.setup(
     author_email='edgemaster@iofog.org',
     description='Native python SDK for Eclipse ioFog development.',
     long_description=long_description,
+    long_description_content_type="text/markdown",
     requires=['ws4py', 'json', 'requests'],
     keywords='ioFog IoT Eclipse fog computing edgeworx',
 )
