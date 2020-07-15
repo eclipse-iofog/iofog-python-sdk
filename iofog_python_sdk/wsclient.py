@@ -107,7 +107,7 @@ class IoFogWsClient(WebSocketClient):
             try:
                 super(IoFogWsClient, self).connect()
             except Exception as e:
-                self._reconnect(reason=e.message)
+                self._reconnect(reason=str(e))
                 continue
             self.run_forever()
             self.logger.debug('Loop exited')
