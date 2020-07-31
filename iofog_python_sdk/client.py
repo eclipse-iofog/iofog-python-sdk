@@ -27,11 +27,11 @@ args = parser.parse_args()
 
 
 class IoFogClient:
-    def __init__(self, id=None, ssl=None, host=None, port=None):
+    def __init__(self, id=None, ssl=None, host=None, port=None, log_level='INFO'):
         self.logger = logging.getLogger(IOFOG_LOGGER)
-        self.logger.setLevel(args.logLevel)
+        self.logger.setLevel(log_level)
         ch = logging.StreamHandler()
-        ch.setLevel(args.logLevel)
+        ch.setLevel(log_level)
         formatter = logging.Formatter(
             '%(levelname)5s [%(asctime)-15s] %(module)10s - <Thread: %(threadName)15s> - %(message)s')
         ch.setFormatter(formatter)
