@@ -8,7 +8,6 @@
 #  SPDX-License-Identifier: EPL-2.0
 #********************************************************************************
 
-import argparse
 import logging
 import os
 
@@ -19,12 +18,6 @@ from iofog_python_sdk.definitions import *
 from iofog_python_sdk.wsclient import IoFogControlWsClient, IoFogMessageWsClient
 from iofog_python_sdk.listener import *
 from iofog_python_sdk.exception import *
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-l", "--log", dest="logLevel", choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-                    help="Set the logging level", default='INFO')
-args = parser.parse_args()
-
 
 class IoFogClient:
     def __init__(self, id=None, ssl=None, host=None, port=None, log_level='INFO'):
