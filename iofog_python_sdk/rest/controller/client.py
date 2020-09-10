@@ -47,11 +47,18 @@ class Client:
                 return fog["uuid"]
 
     def delete_agent(self, name):
-        id = self._get_agent_id(name)
-        if id is not None:
-            self._delete_agent(id)
+        uuid = self._get_agent_id(name)
+        if uuid is not None:
+            self._delete_agent(uuid)
     
     def get_provision_key(self, agent_name):
-        id = self._get_agent_id(agent_name)
-        if id is not None:
-            return self._get_provision_key(id)
+        uuid = self._get_agent_id(agent_name)
+        if uuid is not None:
+            return self._get_provision_key(uuid)
+
+    def upgrade_agent(self, agent_name, version):
+        uuid = self._get_agent_id(agent_name)
+        if uuid is None:
+            raise Exception("Could not get Agent UUID")
+        url = "{}/iofog/{}/version/upgrade".format(self.base_path, uuid)
+        request("POST", url, self.token)

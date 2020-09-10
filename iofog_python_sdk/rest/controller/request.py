@@ -21,7 +21,11 @@ def request(method, address, auth_token="", body={}):
         headers["cache-control"] = "no-cache"
 
     response = switch[method](address, data=data, headers=headers, timeout=30)
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        print(e.response.content)
+        raise e
     responseDict = {}
     if response.content:
         responseDict = json.loads(response.content)
