@@ -1,6 +1,5 @@
 from iofog_python_sdk.rest.controller.request import *
 
-
 class Client:
     """
     Iofog Controller REST API client.
@@ -53,12 +52,16 @@ class Client:
     
     def get_provision_key(self, agent_name):
         uuid = self._get_agent_id(agent_name)
-        if uuid is not None:
-            return self._get_provision_key(uuid)
+        if uuid is None:
+            raise Exception("Could not get Agent UUID")
+        return self._get_provision_key(uuid)
 
     def upgrade_agent(self, agent_name):
         uuid = self._get_agent_id(agent_name)
-        if uuid is None:
-            raise Exception("Could not get Agent UUID")
         url = "{}/iofog/{}/version/upgrade".format(self.base_path, uuid)
-        request("POST", url, self.token)
+        return request("POST", url, self.token)
+
+    def patch_agent(self, agent_name, config):
+        uuid = self._get_agent_id(agent_name)
+        url = "{}/iofog/{}".format(self.base_path, uuid)
+        return request("PATCH", url, self.token, config)
