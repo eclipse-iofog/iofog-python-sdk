@@ -14,11 +14,11 @@ import os
 
 import subprocess
 
-from iofog_python_sdk.client.httpclient import IoFogHttpClient
-from iofog_python_sdk.client.definitions import *
-from iofog_python_sdk.client.wsclient import IoFogControlWsClient, IoFogMessageWsClient
-from iofog_python_sdk.client.listener import *
-from iofog_python_sdk.client.exception import *
+from iofog_python_sdk.microservices.httpclient import IoFogHttpClient
+from iofog_python_sdk.microservices.definitions import *
+from iofog_python_sdk.microservices.wsclient import IoFogControlWsClient, IoFogMessageWsClient
+from iofog_python_sdk.microservices.listener import *
+from iofog_python_sdk.microservices.exception import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--log", dest="logLevel", choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],

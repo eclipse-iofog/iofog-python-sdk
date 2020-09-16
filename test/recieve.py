@@ -1,4 +1,4 @@
-from iofog_python_sdk.client import IoFogClient
+from iofog_python_sdk.microservices import IoFogClient
 from iofog_python_sdk.exception import IoFogException
 from iofog_python_sdk.iomessage import IoMessage
 from iofog_python_sdk.listener import *

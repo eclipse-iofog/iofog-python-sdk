@@ -13,10 +13,10 @@ import json
 from struct import pack, unpack
 import sys
 
-from iofog_python_sdk.client.util import *
+from iofog_python_sdk.microservices.util import *
 import base64
 
-from iofog_python_sdk.client.definitions import *
+from iofog_python_sdk.microservices.definitions import *
 
 
 # todo check fields == None?

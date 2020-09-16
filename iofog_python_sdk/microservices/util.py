@@ -17,7 +17,7 @@ except ImportError:
     import urllib2 as urllib_request # for python 2
 
 from struct import pack
-from iofog_python_sdk.client.definitions import CODE_MSG
+from iofog_python_sdk.microservices.definitions import CODE_MSG
 
 
 def num_to_bytearray(num):

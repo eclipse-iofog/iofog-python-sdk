@@ -1,6 +1,8 @@
 # iofog-python-sdk
 
-This SDK is divided in two parts: client and deploy.
+This SDK provides the following modules:
+* microservices: Clients for Microservices to talk to ioFog (e.g. ioMessage and Web Socket clients)
+* rest.controller: Client for Controller REST API
 
 ## Installation
 
@@ -25,10 +27,10 @@ This module lets you easily build an ioElement. It gives you all the functionali
 
 Import iofog client and additional classes to your project:
 ```python
-from iofog_python_sdk.client.client import IoFogClient
-from iofog_python_sdk.client.exception import IoFogException
-from iofog_python_sdk.client.iomessage import IoMessage
-from iofog_python_sdk.client.listener import *
+from iofog_python_sdk.microservices.client import IoFogClient
+from iofog_python_sdk.microservices.exception import IoFogException
+from iofog_python_sdk.microservices.iomessage import IoMessage
+from iofog_python_sdk.microservices.listener import *
 ```
 
 Create IoFog client with default settings:
@@ -160,41 +162,8 @@ This module lets you easily communicate with the [Controller REST API](https://i
  - Edit microservice configuration
  - Edit flow routing
  
- ### Code snippets
- 
-Import iofog deploy client
-```python
-from iofog_python_sdk.deploy.create_rest_call import rest_call
-from iofog_python_sdk.deploy.microservice_service import microservices
-```
-
-Update microservice config
-```python
-controller_address = http://localhost:51121/api/v3
-microservice_service = microservices()
-
-def iofog_auth(controller_address, email, password):
-    data = {}
-    data["email"] = email
-    data["password"] = password
-    post_address = "{}/user/login".format(controller_address)
-    jsonResponse = rest_call(data, post_address)
-    auth_token = jsonResponse["accessToken"]
-    return auth_token
-
-auth_token = iofog_auth(controller_address, "user@domain.com", "myPassword")
-flow_id = 1
-current_microservice = microservice_service.get_microservice_by_name(controller_address, "my_microservice", flow_id, auth_token)
-
-updated_microservice = current_microservice
-updated_microservice.config = {"newKey": 42}
-
-microservice_service.update_microservice(controller_address, updated_microservice, current_microservice.iofogUuid, catalog_id, auth_token)
-
-```
-
 #### Disclaimer
 
-This module is very much a Work In Progress. It was first written as a set of helper functions used by a python script to deploy a set of microservices configured using yaml files.
+These modules are a Work In Progress. It was first written as a set of helper functions used by a python script to deploy a set of microservices configured using yaml files.
 
-Our [golang SDK](https://github.com/eclipse-iofog/iofog-go-sdk) is more adapted and modular for communicating with the Controller REST API
+Our [golang SDK](https://github.com/eclipse-iofog/iofog-go-sdk) is highly recommended as Controller REST API client.
