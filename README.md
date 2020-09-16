@@ -6,7 +6,7 @@ This SDK is divided in two parts: client and deploy.
 
 Install python package:
 ```bash
-sudo python2 -m pip install iofog-python-sdk
+sudo python3 -m pip install iofog-python-sdk
 ```
 
 ## Client

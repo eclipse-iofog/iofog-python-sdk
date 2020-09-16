@@ -27,21 +27,10 @@ jobs:
         architecture: 'x64'
     - script: |
         bash ./build.sh 'python3'
-      displayName: 'Building 3.x'
+      displayName: 'Building 3.7'
     - script: |
         bash ./test.sh 'python3'
-      displayName: 'Testing 3.x'
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '2.7'
-        addToPath: true
-        architecture: 'x64'
-    - script: |
-        bash ./build.sh 'python2'
-      displayName: 'Building 2.7'
-    - script: |
-        bash ./test.sh 'python2'
-      displayName: 'Testing 2.7'
+      displayName: 'Testing 3.7'
     - task: CopyFiles@2
       inputs:
         SourceFolder: $(System.DefaultWorkingDirectory)
@@ -58,4 +47,3 @@ jobs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'sdk'
       displayName: 'Publish artefacts'
-
