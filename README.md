@@ -11,7 +11,7 @@ Install python package:
 sudo python3 -m pip install iofog
 ```
 
-## Client
+## Microservices
 
 This module lets you easily build an ioElement. It gives you all the functionality to interact with ioFog via Local API. It contains all necessary methods for IoMessage transformation as well.
 
@@ -135,6 +135,7 @@ client.post_message_via_socket(io_msg_instance)
 
 
 ##### Message utils
+
 Construct IoMessage from JSON(both json string and python dictionary are acceptable):
 ```python
 msg = IoMessage.from_json(json_msg)
@@ -154,13 +155,20 @@ Pack IoMessage into bytearray:
 ```python
 msg_bytes = io_msg_instance.to_bytearray()
 ```
-## Deploy
 
-This module lets you easily communicate with the [Controller REST API](https://iofog.org/docs/1.3.0/controllers/rest-api.html).
+#### Logging
 
- - Deploy flow, microservices, agents, etc.
- - Edit microservice configuration
- - Edit flow routing
+```python
+from iofog.microservices.log import Logger
+
+# To stdout
+log = Logger("first")
+log.info("hello-world")
+
+# To file
+log2 = Logger("second", [logging.FileHandler("/tmp/log.txt")])
+log2.debug("hi")
+```
  
 #### Disclaimer
 
