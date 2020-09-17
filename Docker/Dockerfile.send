@@ -5,6 +5,6 @@ COPY test/send.py send.py
 
 RUN pip install ws4py
 
-RUN python -m pip install iofog-python-sdk
+RUN python -m pip install iofog
 
 ENTRYPOINT ["python", "send.py"]

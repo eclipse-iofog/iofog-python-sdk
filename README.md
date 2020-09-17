@@ -1,4 +1,4 @@
-# iofog-python-sdk
+# ioFog Python SDK
 
 This SDK provides the following modules:
 * microservices: Clients for Microservices to talk to ioFog (e.g. ioMessage and Web Socket clients)
@@ -8,7 +8,7 @@ This SDK provides the following modules:
 
 Install python package:
 ```bash
-sudo python3 -m pip install iofog-python-sdk
+sudo python3 -m pip install iofog
 ```
 
 ## Client
