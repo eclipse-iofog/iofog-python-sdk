@@ -22,7 +22,7 @@ setuptools.setup(
         'Tracker': 'https://github.com/eclipse-iofog/iofog-python-sdk/issues',
         'Eclipse ioFog': 'http://iofog.org'
     },
-    packages=['iofog_python_sdk'],
+    packages=setuptools.find_packages(),
     url='https://github.com/eclipse-iofog/iofog-python-sdk',
     license='EPL-2.0',
     author='Eclipse ioFog',
