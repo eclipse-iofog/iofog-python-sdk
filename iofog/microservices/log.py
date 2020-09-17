@@ -37,19 +37,18 @@ class Logger():
         self.logger.setLevel(logging.DEBUG)
         for handler in handlers:
             self.logger.addHandler(handler)
-        self.extra = {} #{'props' : {'extra_property' : 'extra_value'}}
     
     def info(self, msg):
-        self.logger.info(msg, extra = self.extra)
+        self.logger.info(msg)
 
     def debug(self, msg):
-        self.logger.debug(msg, extra = self.extra)
+        self.logger.debug(msg)
 
     def warn(self, msg):
-        self.logger.warn(msg, extra = self.extra)
+        self.logger.warn(msg)
 
     def error(self, msg):
-        self.logger.error(msg, extra = self.extra)
+        self.logger.error(msg)
 
 #if __name__ == "__main__":
 #    log = Logger("serge")
