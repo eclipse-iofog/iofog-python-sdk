@@ -20,7 +20,7 @@ class CustomJSONLog(logging.Formatter):
 
     def format(self, record):
         json_log_object = {"timestamp": datetime.datetime.utcnow().isoformat(),
-                           "level": record.levelname,
+                           "level": record.levelname.lower(),
                            "message": record.getMessage(),
                            }
         return json.dumps(json_log_object)
