@@ -14,8 +14,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='iofog-python-sdk',
-    version='2.0.1',
+    name='iofog',
+    version='0.0.0',
     project_urls={
         'Documentation': 'https://github.com/eclipse-iofog/iofog-python-sdk/blob/master/README.md',
         'Source': 'https://github.com/eclipse-iofog/iofog-python-sdk.git',
@@ -27,7 +27,7 @@ setuptools.setup(
     license='EPL-2.0',
     author='Eclipse ioFog',
     author_email='edgemaster@iofog.org',
-    description='Native python SDK for Eclipse ioFog development.',
+    description='Python SDK for Eclipse ioFog development.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     requires=['ws4py', 'json', 'requests'],

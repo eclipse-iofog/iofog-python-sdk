@@ -27,10 +27,10 @@ This module lets you easily build an ioElement. It gives you all the functionali
 
 Import iofog client and additional classes to your project:
 ```python
-from iofog_python_sdk.microservices.client import IoFogClient
-from iofog_python_sdk.microservices.exception import IoFogException
-from iofog_python_sdk.microservices.iomessage import IoMessage
-from iofog_python_sdk.microservices.listener import *
+from iofog.microservices.client import IoFogClient
+from iofog.microservices.exception import IoFogException
+from iofog.microservices.iomessage import IoMessage
+from iofog.microservices.listener import *
 ```
 
 Create IoFog client with default settings:

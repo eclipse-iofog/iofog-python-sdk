@@ -1,7 +1,7 @@
-from iofog_python_sdk.microservices import IoFogClient
-from iofog_python_sdk.exception import IoFogException
-from iofog_python_sdk.iomessage import IoMessage
-from iofog_python_sdk.listener import *
+from iofog.microservices import IoFogClient
+from iofog.exception import IoFogException
+from iofog.iomessage import IoMessage
+from iofog.listener import *
 
 
 def main():

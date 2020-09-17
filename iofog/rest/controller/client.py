@@ -1,4 +1,4 @@
-from iofog_python_sdk.rest.controller.request import *
+from iofog.rest.controller.request import *
 
 class Client:
     """

@@ -39,7 +39,7 @@ jobs:
           setup.py
           requirements.txt
           README.md
-          iofog_python_sdk/**/*
+          iofog/**/*
         OverWrite: true
       displayName: 'Copy artifacts'
     - task: PublishBuildArtifacts@1
