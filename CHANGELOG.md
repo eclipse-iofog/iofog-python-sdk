@@ -5,6 +5,7 @@
 * Remove deploy module
 * Add rest.controller module
 * Rename client module to microservices
+* Add microservices.log module
 
 ## [v1.3.0]
 
