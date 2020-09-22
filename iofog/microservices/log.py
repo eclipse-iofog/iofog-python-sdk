@@ -45,12 +45,12 @@ class BaseLogger():
     def error(self, msg):
         self.logger.error(msg)
 
-class FileLogger(BaseLogger):
+class Logger(BaseLogger):
 
     def __init__(self, name):
         super().__init__(name)
         self.logger.addHandler(logging.FileHandler("/var/log/iofog-microservice/{}.log".format(name)))
 
 #if __name__ == "__main__":
-#    log = FileLogger("serge")
+#    log = Logger("serge")
 #    log.info("hi")

@@ -159,9 +159,9 @@ msg_bytes = io_msg_instance.to_bytearray()
 #### Logging
 
 ```python
-from iofog.microservices.log import FileLogger
+from iofog.microservices.log import Logger
 
-log = FileLogger("first")
+log = Logger("first")
 log.debug("hello")
 log.info("world")
 log.warn("good")
