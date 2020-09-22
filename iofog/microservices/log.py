@@ -29,7 +29,7 @@ json_logging.init_non_web(custom_formatter=CustomJSONLog, enable_json=True)
 
 class BaseLogger():
 
-    def __init__(self, name, handlers = [logging.StreamHandler(sys.stdout)]):
+    def __init__(self, name):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
     
@@ -49,7 +49,7 @@ class FileLogger(BaseLogger):
 
     def __init__(self, name):
         super().__init__(name)
-        self.logger.addHandler(logging.FileHandler("/var/log/microservice/log.txt"))
+        self.logger.addHandler(logging.FileHandler("/var/log/iofog-microservice/{}.log".format(name)))
 
 #if __name__ == "__main__":
 #    log = FileLogger("serge")
