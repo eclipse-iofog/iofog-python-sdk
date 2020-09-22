@@ -27,16 +27,11 @@ class CustomJSONLog(logging.Formatter):
 
 json_logging.init_non_web(custom_formatter=CustomJSONLog, enable_json=True)
 
-class Logger():
-    """
-    ioFog Logging Client
-    """
+class BaseLogger():
 
     def __init__(self, name, handlers = [logging.StreamHandler(sys.stdout)]):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.DEBUG)
-        for handler in handlers:
-            self.logger.addHandler(handler)
     
     def info(self, msg):
         self.logger.info(msg)
@@ -50,8 +45,12 @@ class Logger():
     def error(self, msg):
         self.logger.error(msg)
 
+class FileLogger(BaseLogger):
+
+    def __init__(self, name):
+        super().__init__(name)
+        self.logger.addHandler(logging.FileHandler("/var/log/microservice/log.txt"))
+
 #if __name__ == "__main__":
-#    log = Logger("serge")
+#    log = FileLogger("serge")
 #    log.info("hi")
-#    log2 = Logger("serge2", [logging.FileHandler("/tmp/log.txt")])
-#    log2.debug("hi")
