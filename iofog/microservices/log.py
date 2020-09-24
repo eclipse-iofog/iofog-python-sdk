@@ -12,6 +12,7 @@ import json_logging, logging, sys
 import datetime
 import traceback
 import json
+import os
 
 class CustomJSONLog(logging.Formatter):
     """
@@ -49,8 +50,14 @@ class Logger(BaseLogger):
 
     def __init__(self, name):
         super().__init__(name)
-        self.logger.addHandler(logging.FileHandler("/var/log/iofog-microservice/{}.log".format(name)))
+        # Create log file
+        log_file = "/var/log/iofog-microservices/{}.log".format(name)
+        if not os.path.exists(log_file):
+            with open(log_file, 'w'):
+                pass
+        # Register log file
+        self.logger.addHandler(logging.FileHandler(log_file))
 
-#if __name__ == "__main__":
-#    log = Logger("serge")
-#    log.info("hi")
+if __name__ == "__main__":
+    log = Logger("werserge")
+    log.info("hi")
