@@ -75,12 +75,3 @@ class Logger(BaseLogger):
     def error(self, msg):
         super().error(msg)
 
-
-if __name__ == "__main__":
-    log = Logger("werserge")
-    log.info("hi")
-    log.info("hi")
-    log.info("hi")
-    log.info("hi")
-    log.info("hi")
-    log.info("hi")
