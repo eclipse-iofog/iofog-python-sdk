@@ -65,3 +65,18 @@ class Client:
         uuid = self._get_agent_id(agent_name)
         url = "{}/iofog/{}".format(self.base_path, uuid)
         return request("PATCH", url, self.token, config)
+
+    def create_app(self, name, msvcs, routes):
+        url = "{}/application/".format(self.base_path)
+        body = {
+            "name": name,
+            "routes": routes,
+            "microservices": msvcs,
+            "isActivated": True,
+            "isSystem": False
+        }
+        return request("POST", url, self.token, body)
+
+    def delete_app(self, name):
+        url = "{}/application/{}".format(self.base_path, name)
+        return request("DELETE", url, self.token)
