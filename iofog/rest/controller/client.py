@@ -16,7 +16,7 @@ class Client:
             "password": password
         }
         self.token = request("POST", url, "", body)["accessToken"]
-    
+
     def get_status(self):
         url = "{}/status".format(self.base_path)
         return request("GET", url)
@@ -38,7 +38,7 @@ class Client:
         url = "{}/iofog/{}".format(self.base_path, agent_id)
         request("DELETE", url, self.token)
     
-    def _get_agent_id(self, name):
+    def get_agent_uuid(self, name):
         url = "{}/iofog-list".format(self.base_path)
         resp = request("GET", url, self.token)
         for fog in resp["fogs"]:
@@ -46,27 +46,29 @@ class Client:
                 return fog["uuid"]
 
     def delete_agent(self, name):
-        uuid = self._get_agent_id(name)
+        uuid = self.get_agent_uuid(name)
         if uuid is not None:
             self._delete_agent(uuid)
     
     def get_provision_key(self, agent_name):
-        uuid = self._get_agent_id(agent_name)
+        uuid = self.get_agent_uuid(agent_name)
         if uuid is None:
             raise Exception("Could not get Agent UUID")
         return self._get_provision_key(uuid)
 
     def upgrade_agent(self, agent_name):
-        uuid = self._get_agent_id(agent_name)
+        uuid = self.get_agent_uuid(agent_name)
         url = "{}/iofog/{}/version/upgrade".format(self.base_path, uuid)
         return request("POST", url, self.token)
 
     def patch_agent(self, agent_name, config):
-        uuid = self._get_agent_id(agent_name)
+        uuid = self.get_agent_uuid(agent_name)
         url = "{}/iofog/{}".format(self.base_path, uuid)
         return request("PATCH", url, self.token, config)
 
     def create_app(self, name, msvcs, routes):
+        if routes is None:
+            routes = []
         url = "{}/application/".format(self.base_path)
         body = {
             "name": name,
