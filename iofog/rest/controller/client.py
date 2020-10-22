@@ -100,6 +100,10 @@ class Client:
         url = "{}/application/{}".format(self.base_path, name)
         return request("DELETE", url, self.token)
 
+    def get_app(self, name):
+        url = "{}/application/{}".format(self.base_path, name)
+        return request("GET", url, self.token)
+
     def _jsonify_yaml_routes(self, routes):
         json_routes = []
         if routes is None:
