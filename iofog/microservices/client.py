@@ -93,6 +93,12 @@ class IoFogClient:
         except Exception as e:
             raise IoFogException(e)
 
+    def get_edge_resources(self):
+        try:
+            return self.http_client.get_edge_resources()
+        except Exception as e:
+            raise IoFogException(e)
+
     def get_next_messages(self):
         try:
             return self.http_client.get_next_messages()

@@ -29,6 +29,7 @@ class IoFogHttpClient:
 
         self.url_base_rest = "{}://{}:{}".format(protocol_rest, host, port)
         self.url_get_config = self.url_base_rest + URL_GET_CONFIG
+        self.url_get_edge_resources = self.url_base_rest + URL_GET_EDGE_RESOURCES
         self.url_get_next_messages = self.url_base_rest + URL_GET_NEXT_MESSAGES
         self.url_get_publishers_messages = self.url_base_rest + URL_GET_PUBLISHERS_MESSAGES
         self.url_post_message = self.url_base_rest + URL_POST_MESSAGE
@@ -39,6 +40,13 @@ class IoFogHttpClient:
     def get_config(self):
         try:
             config_resp = make_post_request(self.url_get_config, APPLICATION_JSON, self.request_body_id)
+        except HTTPError as e:
+            raise IoFogHttpException(e.code, e.read())
+        return json.loads(config_resp[CONFIG])
+    
+    def get_edge_resources(self):
+        try:
+            config_resp = make_get_request(self.url_get_edge_resources, APPLICATION_JSON, self.request_body_id)
         except HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
         return json.loads(config_resp[CONFIG])

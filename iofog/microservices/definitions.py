@@ -18,6 +18,7 @@ HOST_DEFAULT = '127.0.0.1'
 IOFOG_LOGGER = 'iofog_logger'
 
 URL_GET_CONFIG = '/v2/config/get'
+URL_GET_EDGE_RESOURCES = '/v2/edgeResources'
 URL_GET_NEXT_MESSAGES = '/v2/messages/next'
 URL_GET_PUBLISHERS_MESSAGES = '/v2/messages/query'
 URL_POST_MESSAGE = '/v2/messages/new'
