@@ -48,6 +48,11 @@ def make_post_request(url, body_type, body):
     response = urllib_request.urlopen(req)
     return json.loads(response.read())
 
+def make_get_request(url, body_type, body):
+    req = urllib_request.Request(url, body, {'Content-Type': body_type}, method="GET")
+    response = urllib_request.urlopen(req)
+    return json.loads(response.read())
+
 
 def prepare_iomessage_for_sending_via_socket(io_msg):
     msg_bytes = io_msg.to_bytearray()

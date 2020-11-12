@@ -19,6 +19,7 @@ This module lets you easily build an ioElement. It gives you all the functionali
  - fetch next unread messages from ioFog (get_next_messages)
  - fetch messages for time period and list of accessible publishers (get_next_messages_from_publishers_within_timeframe)
  - get config options (get_config)
+ - get Agent's Edge Resources (get_edge_resources)
  - create IoMessage, encode(decode) to(from) raw bytes, marshall(unmarshall) into(from) JSON object (IoMessage class methods)
  - connect to ioFog Control Channel via WebSocket (establish_control_ws_connection)
  - connect to ioFog Message Channel via WebSocket (establish_message_ws_connection) and publish new message via this channel (post_message_via_socket)
@@ -101,6 +102,13 @@ except IoFogException, ex:
  # some error occurred, ex contains description
 ```
 
+Get Agent's Edge Resources:
+```python
+try:
+    edge_resources = client.get_edge_resources()
+except IoFogException, ex:
+ # some error occurred, ex contains description
+```
 
 ##### WebSocket calls
 
@@ -109,6 +117,8 @@ To use websocket connections you should implement listeners as follows:
 class MyControlListener(IoFogControlWsListener):
     def on_control_signal(self):
         # do smth on control signal
+    def on_edge_resources_signal(self):
+        # Agent's Edge Resource list has been updated
 
 
 class MyMessageListener(IoFogMessageWsListener):

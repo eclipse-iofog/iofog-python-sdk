@@ -125,6 +125,10 @@ class IoFogControlWsClient(IoFogWsClient):
             self.logger.debug('Received control')
             self.listener.on_control_signal()
             self.send(bytearray([CODE_ACK]), binary=True)
+        elif opt_code == CODE_EDGE_RESOURCE_SIGNAL:
+            self.logger.debug('Received Edge Resource Signal')
+            self.listener.on_edge_resources_signal()
+            self.send(bytearray([CODE_ACK]), binary=True)
 
 
 class IoFogMessageWsClient(IoFogWsClient):

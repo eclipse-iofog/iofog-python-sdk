@@ -46,10 +46,10 @@ class IoFogHttpClient:
     
     def get_edge_resources(self):
         try:
-            config_resp = make_get_request(self.url_get_edge_resources, APPLICATION_JSON, self.request_body_id)
+            edge_resources_response = make_get_request(self.url_get_edge_resources, APPLICATION_JSON, self.request_body_id)
         except HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
-        return json.loads(config_resp[CONFIG])
+        return json.loads(edge_resources_response[EDGE_RESOURCES])
 
     def get_next_messages(self):
         try:

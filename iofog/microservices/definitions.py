@@ -35,6 +35,7 @@ CODE_ACK = 0xB
 CODE_CONTROL_SIGNAL = 0xC
 CODE_MSG = 0xD
 CODE_RECEIPT = 0xE
+CODE_EDGE_RESOURCE_SIGNAL = 0xF
 
 WS_ATTEMPT_LIMIT = 5
 IO_MESSAGE_VERSION = 4
@@ -68,6 +69,7 @@ TIME_FRAME_START = 'timeframestart'
 TIME_FRAME_END = 'timeframeend'
 PUBLISHERS = 'publishers'
 CONFIG = 'config'
+EDGE_RESOURCES = 'edgeResources'
 MESSAGES = 'messages'
 STATUS = 'status'
 COUNT = 'count'
