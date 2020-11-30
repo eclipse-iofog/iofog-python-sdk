@@ -24,7 +24,7 @@ This module lets you easily build an ioElement. It gives you all the functionali
  - connect to ioFog Control Channel via WebSocket (establish_control_ws_connection)
  - connect to ioFog Message Channel via WebSocket (establish_message_ws_connection) and publish new message via this channel (post_message_via_socket)
 
-### Code snippets: 
+### Usage
 
 Import iofog client and additional classes to your project:
 ```python
@@ -42,7 +42,7 @@ except IoFogException as e:
  # client creation failed, e contains description
 ```
 
-Or specify host, port, ssl and container id explicitly:
+Or specify host, port, and container id explicitly:
 ```python
 try:
     client = IoFogClient(id='container_id', host='iofog_host', port=6666)
@@ -177,9 +177,45 @@ log.info("world")
 log.warn("good")
 log.error("bye")
 ```
+
+## Controller REST API Client
+
+This module provides a client for talking to [ioFog Controller's REST API](https://iofog.org/docs/2/reference-controller/rest-api.html).
+
+### Usage
+
+```python
+# Import Client class
+from iofog.rest.controller.client import Client
+
+# Instantiate Client
+client = Client(
+    host="123.123.123.123",
+    port=51121,
+    email="hello@world.io"
+    password="2uhi40ghas9"
+
+# Get Controller status and API version
+status = client.get_status()
+print(status['versions']['controller'])
+
+# Create an Agent
+name = "agent1"
+host = "123.123.123.124"
+resp = client.create_agent(name, host)
+
+# Upgrade an Agent
+resp = client.upgrade_agent(name)
+
+# Create an Application
+yaml_file = "/tmp/app.yaml"
+resp = client.create_app_from_yaml(yaml_file)
+
+# Get an Application
+app_name = "app1"
+resp = client.get_app(app_name)
+
+# Delete an Application
+resp = client.delete_app(app_name)
+```
  
-#### Disclaimer
-
-These modules are a Work In Progress. It was first written as a set of helper functions used by a python script to deploy a set of microservices configured using yaml files.
-
-Our [golang SDK](https://github.com/eclipse-iofog/iofog-go-sdk) is highly recommended as Controller REST API client.
