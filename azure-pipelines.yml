@@ -9,8 +9,9 @@ trigger:
   paths:
     exclude:
       - README.md
-
-pr: none
+      - CHANGELOG.md
+      - CONTRIBUTING
+      - NOTICE
 
 variables:
   group: 'pipelines'
@@ -25,6 +26,26 @@ jobs:
         versionSpec: '3.7'
         addToPath: true
         architecture: 'x64'
+
+    - script: |
+        set -e
+        test/bootstrap.bash
+      displayName: 'Bootstrap tests'
+
+    - script: |
+        set -e
+        test/setup.bash
+      displayName: 'Setup test environment'
+
+    - script: |
+        set -e
+        test/run.bash
+      displayName: 'Run tests'
+
+    - script: |
+        test/teardown.bash
+      displayName: 'Teardown test environment'
+
     - task: CopyFiles@2
       inputs:
         SourceFolder: $(System.DefaultWorkingDirectory)
@@ -36,6 +57,7 @@ jobs:
           iofog/**/*
         OverWrite: true
       displayName: 'Copy artifacts'
+
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'

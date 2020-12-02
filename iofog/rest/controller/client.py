@@ -7,11 +7,27 @@ class Client:
     """
 
 
-    def __init__(self, host, port, email, password):
+    def __init__(self, host, port, email, password, name="", surname=""):
         self.base_path = "http://" + host + ":" + str(port) + "/api/v3"
-        self._login(email, password)
+        try:
+            self._login(email, password)
+        except Exception:
+            if name == "" or surname == "":
+                raise Exception("Must provide name and surname if User does not already exist")
+            self.create_user(email, password, name, surname)
+            self._login(email, password)
         self.error_yaml_spec = "YAML file does not follow required specification. See https://iofog.org/docs/2/reference-iofogctl/reference-application.html"
-    
+
+    def create_user(self, email, password, name, surname):
+        url = "{}/user/signup".format(self.base_path)
+        body = {
+            "email": email,
+            "password": password,
+            "lastName": name,
+            "firstName": surname
+        }
+        return request("POST", url, "", body)
+
     def _login(self, email, password):
         url = "{}/user/login".format(self.base_path)
         body = {
@@ -24,11 +40,16 @@ class Client:
         url = "{}/status".format(self.base_path)
         return request("GET", url)
 
-    def create_agent(self, name, host):
+    def create_agent(self, name, host, arch=""):
+        fog_type_id = 0
+        if arch != "":
+            if arch not in [ "x86", "arm" ]:
+                raise Exception("Agent architecture {} not supported".format(arch))
+            fog_type_id = 1 if arch == "x86" else 2
         url = "{}/iofog".format(self.base_path)
         body = {
             "name": name,
-            "fogType": 0,
+            "fogType": fog_type_id,
             "host": host
         }
         return request("POST", url, self.token, body)["uuid"]
@@ -119,12 +140,14 @@ class Client:
             json_msvc = dict()
             # images
             images = []
-            for image in msvc["images"].values():
-                imageDict = {
-                    "fogTypeId": 2,
-                    "containerImage": image
-                }
-                images.append(imageDict)
+            for arch in [ "x86", "arm" ]:
+                if arch in msvc["images"]:
+                    fog_type_id = 1 if arch == "x86" else 2
+                    imageDict = {
+                        "fogTypeId": fog_type_id,
+                        "containerImage": msvc["images"][arch]
+                    }
+                    images.append(imageDict)
             json_msvc["images"] = images
             # container
             for pasta in [ "env", "rootHostAccess", "ports", "volumes", "commands" ]:
@@ -134,10 +157,12 @@ class Client:
                 json_msvc["volumeMappings"] = json_msvc["volumes"]
                 json_msvc.pop("volumes")
             # msvc
-            for pasta in [ "config", "name" ]:
+            for pasta in [ "name" ]:
                 if pasta in msvc:
                     json_msvc[pasta] = msvc[pasta]
             json_msvc["registryId"] = 1
+            if "config" in msvc:
+                json_msvc["config"] = json.dumps(msvc["config"])
             if "env" in json_msvc:
                 for env in json_msvc["env"]:
                     env["value"] = str(env["value"])
