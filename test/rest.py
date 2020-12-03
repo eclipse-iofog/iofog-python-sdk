@@ -1,7 +1,7 @@
 import pytest
 from iofog.rest.controller.client import Client
 
-class TestFullState:
+class TestRestState:
     def __init__(self):
         self.email = "serge@edgeworx.io"
         self.password = "wfhoi982bv1sfdjoi"
@@ -10,7 +10,7 @@ class TestFullState:
         self.controller_address = "localhost"
         self.controller_port = 51121
 
-state = TestFullState()
+state = TestRestState()
 
 @pytest.fixture(autouse=True)
 def _fixture():

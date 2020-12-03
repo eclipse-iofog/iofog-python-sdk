@@ -8,7 +8,6 @@
 #  SPDX-License-Identifier: EPL-2.0
 #********************************************************************************
 
-import argparse
 import logging
 import os
 
@@ -20,18 +19,10 @@ from iofog.microservices.wsclient import IoFogControlWsClient, IoFogMessageWsCli
 from iofog.microservices.listener import *
 from iofog.microservices.exception import *
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-l", "--log", dest="logLevel", choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-                    help="Set the logging level", default='INFO')
-args = parser.parse_args()
-
-
-class IoFogClient:
+class Client:
     def __init__(self, id=None, ssl=None, host=None, port=None):
         self.logger = logging.getLogger(IOFOG_LOGGER)
-        self.logger.setLevel(args.logLevel)
         ch = logging.StreamHandler()
-        ch.setLevel(args.logLevel)
         formatter = logging.Formatter(
             '%(levelname)5s [%(asctime)-15s] %(module)10s - <Thread: %(threadName)15s> - %(message)s')
         ch.setFormatter(formatter)
