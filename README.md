@@ -28,7 +28,7 @@ This module lets you easily build an ioElement. It gives you all the functionali
 
 Import iofog client and additional classes to your project:
 ```python
-from iofog.microservices.client import IoFogClient
+from iofog.microservices.client import Client
 from iofog.microservices.exception import IoFogException
 from iofog.microservices.iomessage import IoMessage
 from iofog.microservices.listener import *
@@ -37,7 +37,7 @@ from iofog.microservices.listener import *
 Create IoFog client with default settings:
 ```python
 try:
-    client = IoFogClient()
+    client = Client()
 except IoFogException as e:
  # client creation failed, e contains description
 ```
@@ -45,7 +45,7 @@ except IoFogException as e:
 Or specify host, port, and container id explicitly:
 ```python
 try:
-    client = IoFogClient(id='container_id', host='iofog_host', port=6666)
+    client = Client(id='container_id', host='iofog_host', port=6666)
 except IoFogException as e:
  # client creation failed, e contains description
 ```

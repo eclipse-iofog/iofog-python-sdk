@@ -1,0 +1,45 @@
+---
+apiVersion: iofog.org/v2
+kind: Application
+metadata:
+  name: func-app
+spec:
+  microservices:
+  - name: func-app-server
+    agent:
+      name: agent-1
+      config:
+        bluetoothEnabled: true # this will install the iofog/restblue microservice
+        abstractedHardwareEnabled: false
+    images:
+      arm: edgeworx/healthcare-heart-rate:arm-v1
+      x86: edgeworx/healthcare-heart-rate:x86-v1
+      registry: remote # public docker
+    container:
+      rootHostAccess: false
+      ports: []
+    config:
+      test_mode: true
+      data_label: 'Anonymous_Person'
+  # Simple JSON viewer for the heart rate output
+  - name: func-app-ui
+    agent:
+      name: agent-1
+    images:
+      arm: edgeworx/healthcare-heart-rate-ui:arm
+      x86: edgeworx/healthcare-heart-rate-ui:x86
+      registry: remote
+    container:
+      rootHostAccess: false
+      ports:
+        # The ui will be listening on port 80 (internal).
+        - external: 5000
+          internal: 80
+          public: 5000
+      volumes:
+      - hostDestination: /tmp/iofog
+        containerDestination: /data
+        accessMode: rw
+      env:
+        - key: BASE_URL
+          value: http://localhost:8080/data
