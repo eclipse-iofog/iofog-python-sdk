@@ -27,6 +27,7 @@ class CustomJSONLog(logging.Formatter):
         json_log_object = {"timestamp": datetime.datetime.utcnow().isoformat(),
                            "level": record.levelname.lower(),
                            "message": record.getMessage(),
+                           "deviceid": record.getDeviceId(),
                            "hostname": hostname
                            }
         return json.dumps(json_log_object)
