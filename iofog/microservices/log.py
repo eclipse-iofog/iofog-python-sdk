@@ -24,37 +24,29 @@ class CustomJSONLog(logging.Formatter):
     """
 
     def format(self, record):
+        content = json.loads(record.getMessage())
         json_log_object = {"timestamp": datetime.datetime.utcnow().isoformat(),
+                           "hostname": hostname,
                            "level": record.levelname.lower(),
-                           "message": record.getMessage(),
-                           "hostname": hostname
+                           "message": content["msg"],
+                           "device": content["deviceId"]
                            }
         return json.dumps(json_log_object)
 
 json_logging.init_non_web(custom_formatter=CustomJSONLog, enable_json=True)
 
-class BaseLogger():
+def encode_content(msg, id):
+    content = {
+        "msg": msg,
+        "deviceId": id
+    }
+    return json.dumps(content)
 
-    def __init__(self, name):
+class Logger:
+
+    def __init__(self, name, device_id):
         self.logger = logging.getLogger(name)
-        self.logger.setLevel(logging.DEBUG)
-    
-    def info(self, msg):
-        self.logger.info(msg)
-
-    def debug(self, msg):
-        self.logger.debug(msg)
-
-    def warn(self, msg):
-        self.logger.warn(msg)
-
-    def error(self, msg):
-        self.logger.error(msg)
-
-class Logger(BaseLogger):
-
-    def __init__(self, name):
-        super().__init__(name)
+        self.device_id = device_id
         # Create log file
         self.file = "/var/log/iofog-microservices/{}.log".format(name)
         if not os.path.exists(self.file):
@@ -64,14 +56,25 @@ class Logger(BaseLogger):
         self.logger.addHandler(RotatingFileHandler(filename=self.file, maxBytes=10*1024*1024, backupCount=5))
 
     def info(self, msg):
-        super().info(msg)
+        self.logger.setLevel(logging.INFO)
+        self.logger.info(encode_content(msg, self.device_id))
 
     def debug(self, msg):
-        super().debug(msg)
+        self.logger.setLevel(logging.DEBUG)
+        self.logger.debug(encode_content(msg, self.device_id))
 
-    def warn(self, msg):
-        super().warn(msg)
+    def warning(self, msg):
+        self.logger.setLevel(logging.WARN)
+        self.logger.warning(encode_content(msg, self.device_id))
 
     def error(self, msg):
-        super().error(msg)
+        self.logger.setLevel(logging.ERROR)
+        self.logger.error(encode_content(msg, self.device_id))
 
+
+if __name__=="__main__": 
+    logger = Logger("serge", "123142123")
+    logger.info("hellow")
+    logger.debug("hellow")
+    logger.warning("hellow")
+    logger.error("hellow")
