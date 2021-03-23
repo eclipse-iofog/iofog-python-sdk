@@ -1,0 +1,22 @@
+---
+apiVersion: iofog.org/v2
+kind: LocalControlPlane
+metadata:
+  name: local-1
+spec:
+  iofogUser:
+    name: Foo
+    surname: Bar
+    email: user@domain.com
+    password: g9hr823rhuoi
+  controller:
+    container:
+      image: gcr.io/focal-freedom-236620/controller:develop
+---
+apiVersion: iofog.org/v2
+kind: LocalAgent
+metadata:
+  name: local-1
+spec:
+  container:
+    image: gcr.io/focal-freedom-236620/agent:develop

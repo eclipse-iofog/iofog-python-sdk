@@ -10,7 +10,3 @@ fi
 # Build Python Images
 docker build --build-arg TAG_NAME=${PYTHON_TAG} -t iofog/test-python-sdk-send:${PYTHON_VERSION} -f ./Docker/Dockerfile.send .
 docker build --build-arg TAG_NAME=${PYTHON_TAG} -t iofog/test-python-sdk-recieve:${PYTHON_VERSION} -f ./Docker/Dockerfile.recieve .
-
-# Push Python Images
-docker push iofog/test-python-sdk-send:${PYTHON_VERSION}
-docker push iofog/test-python-sdk-recieve:${PYTHON_VERSION}

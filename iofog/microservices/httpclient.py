@@ -15,10 +15,10 @@ try:
 except ImportError:
     from urllib2 import HTTPError #for python 2
 
-from iofog_python_sdk.definitions import *
-from iofog_python_sdk.util import make_post_request
-from iofog_python_sdk.iomessage import IoMessage
-from iofog_python_sdk.exception import IoFogHttpException
+from iofog.microservices.definitions import *
+from iofog.microservices.util import make_post_request
+from iofog.microservices.iomessage import IoMessage
+from iofog.microservices.exception import IoFogHttpException
 
 
 class IoFogHttpClient:
@@ -29,6 +29,7 @@ class IoFogHttpClient:
 
         self.url_base_rest = "{}://{}:{}".format(protocol_rest, host, port)
         self.url_get_config = self.url_base_rest + URL_GET_CONFIG
+        self.url_get_edge_resources = self.url_base_rest + URL_GET_EDGE_RESOURCES
         self.url_get_next_messages = self.url_base_rest + URL_GET_NEXT_MESSAGES
         self.url_get_publishers_messages = self.url_base_rest + URL_GET_PUBLISHERS_MESSAGES
         self.url_post_message = self.url_base_rest + URL_POST_MESSAGE
@@ -42,6 +43,13 @@ class IoFogHttpClient:
         except HTTPError as e:
             raise IoFogHttpException(e.code, e.read())
         return json.loads(config_resp[CONFIG])
+    
+    def get_edge_resources(self):
+        try:
+            edge_resources_response = make_get_request(self.url_get_edge_resources, APPLICATION_JSON, self.request_body_id)
+        except HTTPError as e:
+            raise IoFogHttpException(e.code, e.read())
+        return json.loads(edge_resources_response[EDGE_RESOURCES])
 
     def get_next_messages(self):
         try:

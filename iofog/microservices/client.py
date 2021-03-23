@@ -8,30 +8,21 @@
 #  SPDX-License-Identifier: EPL-2.0
 #********************************************************************************
 
-import argparse
 import logging
 import os
 
 import subprocess
 
-from iofog_python_sdk.httpclient import IoFogHttpClient
-from iofog_python_sdk.definitions import *
-from iofog_python_sdk.wsclient import IoFogControlWsClient, IoFogMessageWsClient
-from iofog_python_sdk.listener import *
-from iofog_python_sdk.exception import *
+from iofog.microservices.httpclient import IoFogHttpClient
+from iofog.microservices.definitions import *
+from iofog.microservices.wsclient import IoFogControlWsClient, IoFogMessageWsClient
+from iofog.microservices.listener import *
+from iofog.microservices.exception import *
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-l", "--log", dest="logLevel", choices=['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
-                    help="Set the logging level", default='INFO')
-args = parser.parse_args()
-
-
-class IoFogClient:
+class Client:
     def __init__(self, id=None, ssl=None, host=None, port=None):
         self.logger = logging.getLogger(IOFOG_LOGGER)
-        self.logger.setLevel(args.logLevel)
         ch = logging.StreamHandler()
-        ch.setLevel(args.logLevel)
         formatter = logging.Formatter(
             '%(levelname)5s [%(asctime)-15s] %(module)10s - <Thread: %(threadName)15s> - %(message)s')
         ch.setFormatter(formatter)
@@ -90,6 +81,12 @@ class IoFogClient:
     def get_config(self):
         try:
             return self.http_client.get_config()
+        except Exception as e:
+            raise IoFogException(e)
+
+    def get_edge_resources(self):
+        try:
+            return self.http_client.get_edge_resources()
         except Exception as e:
             raise IoFogException(e)
 

@@ -15,6 +15,9 @@ class IoFogControlWsListener:
     def on_control_signal(self):
         pass
 
+    def on_edge_resources_signal(self):
+        pass
+
 
 class IoFogMessageWsListener:
     def __init__(self):
