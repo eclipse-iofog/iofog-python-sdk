@@ -15,7 +15,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='iofog',
-    version='0.0.10',
+    version='3.0.0-alpha1',
     project_urls={
         'Documentation': 'https://github.com/eclipse-iofog/iofog-python-sdk/blob/master/README.md',
         'Source': 'https://github.com/eclipse-iofog/iofog-python-sdk.git',
