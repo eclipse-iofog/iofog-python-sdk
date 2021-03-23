@@ -9,13 +9,14 @@
 #********************************************************************************
 
 from logging.handlers import RotatingFileHandler
-import json_logging, logging, sys
+import json_logging, logging
 import datetime
-import traceback
 import json
 import os
 import socket
 
+DEVICE_KEY="deviceId"
+MSG_KEY="msg"
 hostname = socket.gethostname()
 
 class CustomJSONLog(logging.Formatter):
@@ -28,27 +29,29 @@ class CustomJSONLog(logging.Formatter):
         json_log_object = {"timestamp": datetime.datetime.utcnow().isoformat(),
                            "hostname": hostname,
                            "level": record.levelname.lower(),
-                           "message": content["msg"],
-                           "deviceId": content["deviceId"]
-                           }
+                           "message": content[MSG_KEY]}
+        if DEVICE_KEY in content:
+            json_log_object[DEVICE_KEY] = content[DEVICE_KEY]
         return json.dumps(json_log_object)
 
 json_logging.init_non_web(custom_formatter=CustomJSONLog, enable_json=True)
 
 def encode_content(msg, id):
-    content = {
-        "msg": msg,
-        "deviceId": id
-    }
-    return json.dumps(content)
+    if id is None:
+        return json.dumps({MSG_KEY: msg})
+    return json.dumps({MSG_KEY: msg, DEVICE_KEY: id})
 
 class Logger:
 
-    def __init__(self, name, device_id):
+    def __init__(self, name, device_id=None, log_dir=None):
         self.logger = logging.getLogger(name)
         self.device_id = device_id
         # Create log file
-        self.file = "/var/log/iofog-microservices/{}.log".format(name)
+        if log_dir is None:
+            log_dir = "/var/log/iofog-microservices"
+        else:
+            log_dir = log_dir.rstrip('/')
+        self.file = "{}/{}.log".format(log_dir, name)
         if not os.path.exists(self.file):
             with open(self.file, 'w+') as f:
                 pass
@@ -71,10 +74,3 @@ class Logger:
         self.logger.setLevel(logging.ERROR)
         self.logger.error(encode_content(msg, self.device_id))
 
-
-if __name__=="__main__": 
-    logger = Logger("serge", "123142123")
-    logger.info("hellow")
-    logger.debug("hellow")
-    logger.warning("hellow")
-    logger.error("hellow")

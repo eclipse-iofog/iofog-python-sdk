@@ -1,6 +1,6 @@
 # Changelog
 
-## [v2.0.0] - unreleased
+## [v3.0.0-alpha1] - 23 March 2021
 
 * Remove deploy module
 * Add rest.controller module

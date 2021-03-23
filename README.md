@@ -171,10 +171,10 @@ msg_bytes = io_msg_instance.to_bytearray()
 ```python
 from iofog.microservices.log import Logger
 
-log = Logger("first")
+log = Logger("logger1")
 log.debug("hello")
 log.info("world")
-log.warn("good")
+log.warning("good")
 log.error("bye")
 ```
 
@@ -193,7 +193,7 @@ client = Client(
     host="123.123.123.123",
     port=51121,
     email="hello@world.io"
-    password="2uhi40ghas9"
+    password="2uhi40ghas9")
 
 # Get Controller status and API version
 status = client.get_status()

@@ -5,7 +5,7 @@ set -e
 # Get test names from args, run all if empty
 TESTS="$1"
 if [ -z "$TESTS" ]; then
-    TESTS=("rest")
+    TESTS=("rest" "log")
 fi
 
 # Run specified tests
