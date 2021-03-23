@@ -29,7 +29,7 @@ class CustomJSONLog(logging.Formatter):
                            "hostname": hostname,
                            "level": record.levelname.lower(),
                            "message": content["msg"],
-                           "device": content["deviceId"]
+                           "deviceId": content["deviceId"]
                            }
         return json.dumps(json_log_object)
 
