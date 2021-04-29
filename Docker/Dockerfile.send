@@ -5,6 +5,7 @@ COPY test/send.py send.py
 
 RUN pip install ws4py
 
-RUN python -m pip install iofog-python-sdk
+ADD iofog_python_sdk iofog_python_sdk
 
-ENTRYPOINT ["python", "send.py"]
+CMD export SELFNAME=iofog; python send.py
+

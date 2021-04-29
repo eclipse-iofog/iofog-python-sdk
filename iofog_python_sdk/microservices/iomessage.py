@@ -40,8 +40,8 @@ class IoMessage:
         self.difficultytarget = 0
         self.infotype = ''
         self.infoformat = ''
-        self.contextdata = bytearray()
-        self.contentdata = bytearray()
+        self.contextdata = ''
+        self.contentdata = ''
 
     def to_bytearray(self):
         if self.version != IO_MESSAGE_VERSION:
@@ -253,7 +253,7 @@ class IoMessage:
             DIFFICULTY_TARGET: self.difficultytarget,
             INFO_TYPE: self.infotype,
             INFO_FORMAT: self.infoformat,
-            CONTEXT_DATA: base64.b64encode(self.contextdata),
-            CONTENT_DATA: base64.b64encode(self.contentdata)
+            CONTEXT_DATA: self.contextdata,
+            CONTENT_DATA: self.contentdata
         }
         return json.dumps(json_msg)
