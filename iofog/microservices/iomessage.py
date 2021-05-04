@@ -63,19 +63,19 @@ class IoMessage:
         # sequence number
         byte_num, byte_num_len = num_to_bytearray(self.sequencenumber)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num.encode())
+        body.extend(byte_num)
         # sequence total
         byte_num, byte_num_len = num_to_bytearray(self.sequencetotal)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num.encode())
+        body.extend(byte_num)
         # priority
         byte_num, byte_num_len = num_to_bytearray(self.priority)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num.encode())
+        body.extend(byte_num)
         # timestamp
         byte_num, byte_num_len = num_to_bytearray(self.timestamp)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num.encode())
+        body.extend(byte_num)
         # publisher
         header.extend(pack('>B', len(self.publisher)))
         body.extend(self.publisher.encode())
@@ -88,7 +88,7 @@ class IoMessage:
         # chain position
         byte_num, byte_num_len = num_to_bytearray(self.chainposition)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num.encode())
+        body.extend(byte_num)
         # hash
         header.extend(pack('>H', len(self.hash)))
         body.extend(self.hash.encode())
@@ -101,7 +101,7 @@ class IoMessage:
         # difficulty target
         byte_num, byte_num_len = num_to_bytearray(self.difficultytarget)
         header.extend(pack('>B', byte_num_len))
-        body.extend(byte_num.encode())
+        body.extend(byte_num)
         # info type
         header.extend(pack('>B', len(self.infotype)))
         body.extend(self.infotype.encode())
