@@ -1,5 +1,5 @@
 ---
-apiVersion: iofog.org/
+apiVersion: iofog.org/v3
 kind: LocalControlPlane
 metadata:
   name: local-1
