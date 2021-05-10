@@ -1,5 +1,5 @@
 ---
-apiVersion: iofog.org/v2
+apiVersion: iofog.org/v3
 kind: Application
 metadata:
   name: func-app
