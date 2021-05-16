@@ -12,6 +12,7 @@ trigger:
       - CHANGELOG.md
       - CONTRIBUTING
       - NOTICE
+      - LICENSE
 
 variables:
   group: 'pipelines'
