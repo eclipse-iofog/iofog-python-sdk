@@ -7,8 +7,8 @@ class Client:
     """
 
 
-    def __init__(self, host, port, email, password, name="", surname=""):
-        self.base_path = "http://" + host + ":" + str(port) + "/api/v3"
+    def __init__(self, base_url , email, password, name="", surname=""):
+        self.base_url = base_url
         try:
             self._login(email, password)
         except Exception:
@@ -19,7 +19,7 @@ class Client:
         self.error_yaml_spec = "YAML file does not follow required specification. See https://iofog.org/docs/2/reference-iofogctl/reference-application.html"
 
     def create_user(self, email, password, name, surname):
-        url = "{}/user/signup".format(self.base_path)
+        url = "{}/user/signup".format(self.base_url)
         body = {
             "email": email,
             "password": password,
@@ -29,7 +29,7 @@ class Client:
         return request("POST", url, "", body)
 
     def _login(self, email, password):
-        url = "{}/user/login".format(self.base_path)
+        url = "{}/user/login".format(self.base_url)
         body = {
             "email": email,
             "password": password
@@ -37,7 +37,7 @@ class Client:
         self.token = request("POST", url, "", body)["accessToken"]
 
     def get_status(self):
-        url = "{}/status".format(self.base_path)
+        url = "{}/status".format(self.base_url)
         return request("GET", url)
 
     def create_agent(self, name, host, arch=""):
@@ -46,7 +46,7 @@ class Client:
             if arch not in [ "x86", "arm" ]:
                 raise Exception("Agent architecture {} not supported".format(arch))
             fog_type_id = 1 if arch == "x86" else 2
-        url = "{}/iofog".format(self.base_path)
+        url = "{}/iofog".format(self.base_url)
         body = {
             "name": name,
             "fogType": fog_type_id,
@@ -55,15 +55,15 @@ class Client:
         return request("POST", url, self.token, body)["uuid"]
 
     def _get_provision_key(self, agent_id):
-        url = "{}/iofog/{}/provisioning-key".format(self.base_path, agent_id)
+        url = "{}/iofog/{}/provisioning-key".format(self.base_url, agent_id)
         return request("GET", url, self.token)["key"]
     
     def _delete_agent(self, agent_id):
-        url = "{}/iofog/{}".format(self.base_path, agent_id)
+        url = "{}/iofog/{}".format(self.base_url, agent_id)
         request("DELETE", url, self.token)
     
     def get_agent_uuid(self, name):
-        url = "{}/iofog-list".format(self.base_path)
+        url = "{}/iofog-list".format(self.base_url)
         resp = request("GET", url, self.token)
         for fog in resp["fogs"]:
             if fog["name"] == name:
@@ -82,18 +82,18 @@ class Client:
 
     def upgrade_agent(self, agent_name):
         uuid = self.get_agent_uuid(agent_name)
-        url = "{}/iofog/{}/version/upgrade".format(self.base_path, uuid)
+        url = "{}/iofog/{}/version/upgrade".format(self.base_url, uuid)
         return request("POST", url, self.token)
 
     def patch_agent(self, agent_name, config):
         uuid = self.get_agent_uuid(agent_name)
-        url = "{}/iofog/{}".format(self.base_path, uuid)
+        url = "{}/iofog/{}".format(self.base_url, uuid)
         return request("PATCH", url, self.token, config)
 
     def create_app(self, name, msvcs, routes):
         if routes is None:
             routes = []
-        url = "{}/application/".format(self.base_path)
+        url = "{}/application/".format(self.base_url)
         body = {
             "name": name,
             "routes": routes,
@@ -118,11 +118,11 @@ class Client:
         return self.create_app(name, json_msvcs, json_routes)
 
     def delete_app(self, name):
-        url = "{}/application/{}".format(self.base_path, name)
+        url = "{}/application/{}".format(self.base_url, name)
         return request("DELETE", url, self.token)
 
     def get_app(self, name):
-        url = "{}/application/{}".format(self.base_path, name)
+        url = "{}/application/{}".format(self.base_url, name)
         return request("GET", url, self.token)
 
     def _jsonify_yaml_routes(self, routes):

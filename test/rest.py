@@ -18,8 +18,9 @@ def _fixture():
 
 @pytest.mark.dependency()
 def test_create_user(_fixture):
-    _fixture.client = Client(_fixture.controller_address,
-                             _fixture.controller_port,
+    base_url = "http://{}:{}/api/v3".format(_fixture.controller_address,
+                                            _fixture.controller_port)
+    _fixture.client = Client(base_url,
                              _fixture.email,
                              _fixture.password,
                              _fixture.name,
