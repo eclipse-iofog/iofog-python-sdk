@@ -190,8 +190,7 @@ from iofog.rest.controller.client import Client
 
 # Instantiate Client
 client = Client(
-    host="123.123.123.123",
-    port=51121,
+    base_url="http://33.33.33.33:51121/api/v3",
     email="hello@world.io"
     password="2uhi40ghas9")
 
