@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.0-alpha2] - 6 July 2021
+
+* Change rest.controller module to take base_url in constructor
+
 ## [v3.0.0-alpha1] - 23 March 2021
 
 * Remove deploy module
