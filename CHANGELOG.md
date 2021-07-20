@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.0-alpha3] - 20 July 2021
+
+* Add retries to REST client for 503 etc
+
 ## [v3.0.0-alpha2] - 6 July 2021
 
 * Change rest.controller module to take base_url in constructor
