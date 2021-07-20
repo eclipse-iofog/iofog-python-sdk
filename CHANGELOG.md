@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.0-alpha4] - 20 July 2021
+
+* Add appropriate time delay between retries in REST client
+
 ## [v3.0.0-alpha3] - 20 July 2021
 
 * Add retries to REST client for 503 etc
