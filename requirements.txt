@@ -2,3 +2,4 @@ PyYAML==5.3.1
 requests==2.24.0
 ws4py==0.5.1
 json-logging==1.2.11
+urllib3==1.25.9
