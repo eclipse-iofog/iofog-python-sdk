@@ -4,7 +4,8 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
 def request(method, address, auth_token="", body={}):
-    retry_strategy = Retry(total=3,
+    retry_strategy = Retry(total=4,
+                           backoff_factor=2,
                            status_forcelist=[429, 500, 502, 503, 504],
                            method_whitelist=["HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"])
     adapter = HTTPAdapter(max_retries=retry_strategy)
