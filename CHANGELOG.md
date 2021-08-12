@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.0.0-beta] - 13 Auguest 2021
+## [v3.0.0-beta1] - 13 Auguest 2021
 
 * No changes from alpha4
 
