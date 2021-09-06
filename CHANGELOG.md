@@ -1,5 +1,9 @@
 # Changelog
 
+## [v3.0.0-beta2] - 7 September 2021
+
+* Fix str/bytes type mismatches for iomessage client
+
 ## [v3.0.0-beta1] - 13 Auguest 2021
 
 * No changes from alpha4

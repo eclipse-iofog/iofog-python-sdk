@@ -234,6 +234,10 @@ class IoMessage:
         return msg
 
     def to_json(self):
+        if isinstance(self.contentdata, str):
+            self.contentdata = self.contentdata.encode()
+        if isinstance(self.contextdata, str):
+            self.contextdata = self.contextdata.encode()
         json_msg = {
             VERSION: self.version,
             ID: self.id,
@@ -253,7 +257,7 @@ class IoMessage:
             DIFFICULTY_TARGET: self.difficultytarget,
             INFO_TYPE: self.infotype,
             INFO_FORMAT: self.infoformat,
-            CONTEXT_DATA: base64.b64encode(self.contextdata),
-            CONTENT_DATA: base64.b64encode(self.contentdata)
+            CONTEXT_DATA: base64.b64encode(self.contextdata).decode('utf-8'),
+            CONTENT_DATA: base64.b64encode(self.contentdata).decode('utf-8')
         }
-        return json.dumps(json_msg)
+        return json.dumps(json_msg).encode()
